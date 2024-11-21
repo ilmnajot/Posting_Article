@@ -8,4 +8,5 @@ public interface ArticleMapper {
     Article toArticleEntity(ArticleDTO articleDTO);
 
     ArticleDTO toArticleDTO(Article article);
+    Article toUpdateArticleEntity(Article article, ArticleDTO articleDTO);
 }

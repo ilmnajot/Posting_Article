@@ -11,6 +11,7 @@ import uz.ilmnajot.post_article.entity.User;
 @Getter
 public class ArticleDTO {
 
+    private Long id;
     private String title;
     private String content;
     private Long authorId;

@@ -7,6 +7,7 @@ import uz.ilmnajot.post_article.entity.Category;
 import uz.ilmnajot.post_article.entity.User;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
 import uz.ilmnajot.post_article.payload.ArticleDTO;
+import uz.ilmnajot.post_article.repository.ArticleRepository;
 import uz.ilmnajot.post_article.repository.CategoryRepository;
 import uz.ilmnajot.post_article.repository.UserRepository;
 import uz.ilmnajot.post_article.utils.MessageKey;
@@ -16,10 +17,12 @@ public class ArticleMapperImpl implements ArticleMapper {
 
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final ArticleRepository articleRepository;
 
-    public ArticleMapperImpl(UserRepository userRepository, CategoryRepository categoryRepository) {
+    public ArticleMapperImpl(UserRepository userRepository, CategoryRepository categoryRepository, ArticleRepository articleRepository) {
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+        this.articleRepository = articleRepository;
     }
 
     public Article toArticleEntity(ArticleDTO articleDTO) {
@@ -43,5 +46,27 @@ public class ArticleMapperImpl implements ArticleMapper {
         articleDTO.setAuthorId(article.getAuthor().getId());
         articleDTO.setCategoryId(article.getCategory().getId());
         return articleDTO;
+    }
+
+    public Article toUpdateArticleEntity(Article article, ArticleDTO articleDTO) {
+
+        User user = this.userRepository.findByIdAndDeleteFalse(articleDTO.getAuthorId()).orElseThrow(
+                () -> new ResourceNotFoundException("User not found", HttpStatus.NOT_FOUND));
+        Category category = this.categoryRepository.findByIdAndDeleteFalse(articleDTO.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException("Category not found", HttpStatus.NOT_FOUND));
+
+        if (articleDTO.getTitle() != null) {
+            article.setTitle(articleDTO.getTitle());
+        }
+        if (articleDTO.getContent() != null) {
+            article.setContent(articleDTO.getContent());
+        }
+        if (articleDTO.getAuthorId() != null) {
+            article.setAuthor(user);
+        }
+        if (articleDTO.getCategoryId() != null) {
+            article.setCategory(category);
+        }
+        return article;
+
     }
 }
