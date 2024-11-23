@@ -40,13 +40,16 @@ public class CommentController {
         ApiResponse comments = commentService.getAllDeletedComments();
         return ResponseEntity.ok(comments);
     }
+
     @DeleteMapping("/deleteComment/{commentId}")
     public HttpEntity<ApiResponse> deleteComment(@PathVariable Long commentId) {
         ApiResponse apiResponse = commentService.deleteComment(commentId);
         return ResponseEntity.ok(apiResponse);
     }
-    @PutMapping("/updateComment/{commentId}")
+
+    @PutMapping("/updateComment/{userId}/{commentId}")
     public HttpEntity<ApiResponse> updateComment(@PathVariable Long commentId, @RequestBody CommentDTO commentDTO) {
-        commentService.updateComment(commentId, commentDTO);
+        ApiResponse apiResponse = commentService.updateComment(commentId, commentDTO);
+        return ResponseEntity.ok(apiResponse);
     }
 }

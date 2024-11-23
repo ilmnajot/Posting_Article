@@ -1,4 +1,4 @@
-package uz.ilmnajot.post_article.config;
+package uz.ilmnajot.post_article.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

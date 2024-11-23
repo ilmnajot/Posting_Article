@@ -6,12 +6,12 @@ import uz.ilmnajot.post_article.entity.Article;
 import uz.ilmnajot.post_article.entity.Comment;
 import uz.ilmnajot.post_article.entity.User;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
+import uz.ilmnajot.post_article.mapper.CommentMapper;
 import uz.ilmnajot.post_article.payload.CommentDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.repository.ArticleRepository;
 import uz.ilmnajot.post_article.repository.CommentRepository;
 import uz.ilmnajot.post_article.repository.UserRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +21,13 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
+    private final CommentMapper commentMapper;
 
-    public CommentServiceImpl(CommentRepository commentRepository, UserRepository userRepository, ArticleRepository articleRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, UserRepository userRepository, ArticleRepository articleRepository, CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
         this.userRepository = userRepository;
         this.articleRepository = articleRepository;
+        this.commentMapper = commentMapper;
     }
 
     @Override
@@ -39,25 +41,35 @@ public class CommentServiceImpl implements CommentService {
         comment.setArticle(article);
         comment.setUser(user);
         Comment saved = commentRepository.save(comment);
-        return new ApiResponse(true, "success", HttpStatus.CREATED, saved);
+        CommentDTO mapperCommentDTO = commentMapper.toCommentDTO(saved);
+        return new ApiResponse(true, "success", HttpStatus.CREATED, mapperCommentDTO);
     }
 
     @Override
     public ApiResponse findCommentById(Long commentId) {
         Comment comment = getCommentById(commentId);
-        return new ApiResponse(true, "success", HttpStatus.OK, comment);
+        CommentDTO commentDTO = commentMapper.toCommentDTO(comment);
+        return new ApiResponse(true, "success", HttpStatus.OK, commentDTO);
     }
 
     @Override
     public ApiResponse getAllComments() {
         List<Comment> commentList = commentRepository.findAll();
-        return new ApiResponse(true, "success", HttpStatus.OK, commentList);
+        List<CommentDTO> commentDTOList = new ArrayList<>();
+        for (Comment comment : commentList) {
+            commentDTOList.add(commentMapper.toCommentDTO(comment));
+        }
+        return new ApiResponse(true, "success", HttpStatus.OK, commentDTOList);
     }
 
     @Override
     public ApiResponse getAllDeletedComments() {
         List<Comment> commentList = commentRepository.findAllByDeleteIsFalse();
-        return new ApiResponse(true, "success", HttpStatus.OK, commentList);
+        List<CommentDTO> commentDTOList = new ArrayList<>();
+        for (Comment comment : commentList) {
+            commentDTOList.add(commentMapper.toCommentDTO(comment));
+        }
+        return new ApiResponse(true, "success", HttpStatus.OK, commentDTOList);
     }
 
     @Override
@@ -71,8 +83,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public ApiResponse updateComment(Long commentId, CommentDTO commentDTO) {
         Comment comment = getCommentById(commentId);
-
-        return null;
+        Comment updateCommentEntity = commentMapper.toUpdateCommentEntity(commentDTO, comment);
+        Comment saved = commentRepository.save(updateCommentEntity);
+        CommentDTO mapperCommentDTO = commentMapper.toCommentDTO(saved);
+        return new ApiResponse(true, "success", HttpStatus.OK, mapperCommentDTO);
     }
 
     private Comment getCommentById(Long commentId) {

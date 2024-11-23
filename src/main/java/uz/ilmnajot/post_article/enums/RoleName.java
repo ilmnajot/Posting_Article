@@ -4,5 +4,6 @@ public enum RoleName {
 
     USER,
     ADMIN,
-    AUTHOR
+    AUTHOR,
+    IN_REGISTRATION
 }

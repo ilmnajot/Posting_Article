@@ -21,4 +21,6 @@ public interface MessageKey {
     String NULL_USERNAME_FROM_TOKEN = "NULL_USERNAME_FROM_TOKEN";
     String INVALID_TOKEN = "INVALID_TOKEN";
     String FORBIDDEN = "FORBIDDEN";
+    String ROLE_USER = "USER";
+    String ROLE_ADMIN = "ADMIN";
 }
