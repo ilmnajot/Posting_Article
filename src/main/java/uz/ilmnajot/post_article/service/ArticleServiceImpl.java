@@ -8,6 +8,8 @@ import uz.ilmnajot.post_article.mapper.ArticleMapper;
 import uz.ilmnajot.post_article.payload.ArticleDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.repository.ArticleRepository;
+import uz.ilmnajot.post_article.service.interfaces.ArticleService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

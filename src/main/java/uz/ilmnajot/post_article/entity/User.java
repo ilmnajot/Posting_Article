@@ -1,4 +1,5 @@
 package uz.ilmnajot.post_article.entity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -8,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import uz.ilmnajot.post_article.component.AbstractEntity;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -33,9 +35,18 @@ public class User extends AbstractEntity implements UserDetails {
 
     private boolean isEnable;
 
+    public User(String fName, String lName, String email, String password, Role role, boolean isEnable) {
+        this.fName = fName;
+        this.lName = lName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.isEnable = isEnable;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.getName()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.getName()));
     }
 
     @Override

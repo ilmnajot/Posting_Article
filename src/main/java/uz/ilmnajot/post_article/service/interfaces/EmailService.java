@@ -1,4 +1,4 @@
-package uz.ilmnajot.post_article.service;
+package uz.ilmnajot.post_article.service.interfaces;
 
 public interface EmailService {
 

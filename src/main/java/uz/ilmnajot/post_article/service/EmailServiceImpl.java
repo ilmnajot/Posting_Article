@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 import uz.ilmnajot.post_article.entity.User;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
 import uz.ilmnajot.post_article.repository.UserRepository;
+import uz.ilmnajot.post_article.service.interfaces.EmailService;
 
 import java.security.SecureRandom;
-import java.util.Random;
 
 @RequiredArgsConstructor
 @Service

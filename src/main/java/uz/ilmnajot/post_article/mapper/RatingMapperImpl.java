@@ -1,16 +1,14 @@
 package uz.ilmnajot.post_article.mapper;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import uz.ilmnajot.post_article.entity.Article;
 import uz.ilmnajot.post_article.entity.Rating;
 import uz.ilmnajot.post_article.entity.User;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
 import uz.ilmnajot.post_article.payload.RatingDTO;
-import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.repository.ArticleRepository;
 import uz.ilmnajot.post_article.repository.UserRepository;
-import uz.ilmnajot.post_article.service.ArticleService;
+import uz.ilmnajot.post_article.service.interfaces.ArticleService;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 

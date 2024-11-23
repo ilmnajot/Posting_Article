@@ -9,9 +9,9 @@ import uz.ilmnajot.post_article.mapper.CategoryMapper;
 import uz.ilmnajot.post_article.payload.CategoryDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.repository.CategoryRepository;
+import uz.ilmnajot.post_article.service.interfaces.CategoryService;
 import uz.ilmnajot.post_article.utils.MessageKey;
 
-import java.rmi.AlreadyBoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

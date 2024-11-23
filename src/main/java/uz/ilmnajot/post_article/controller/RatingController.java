@@ -2,9 +2,10 @@ package uz.ilmnajot.post_article.controller;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
-import uz.ilmnajot.post_article.service.RatingService;
+import uz.ilmnajot.post_article.service.interfaces.RatingService;
 
 @RestController
 @RequestMapping("/api/ratings")
@@ -16,6 +17,7 @@ public class RatingController {
         this.ratingService = ratingService;
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @PostMapping("/rating/{userId}/{articleId}")
     public HttpEntity<ApiResponse> addRating(@PathVariable(name = "userId") Long userId,
                                              @PathVariable(name="articleId") Long articleId,

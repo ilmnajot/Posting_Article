@@ -12,6 +12,7 @@ import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.repository.ArticleRepository;
 import uz.ilmnajot.post_article.repository.RatingRepository;
 import uz.ilmnajot.post_article.repository.UserRepository;
+import uz.ilmnajot.post_article.service.interfaces.RatingService;
 
 @Service
 public class RatingServiceImpl implements RatingService {

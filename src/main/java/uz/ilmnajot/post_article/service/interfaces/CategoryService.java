@@ -1,4 +1,4 @@
-package uz.ilmnajot.post_article.service;
+package uz.ilmnajot.post_article.service.interfaces;
 
 import uz.ilmnajot.post_article.payload.CategoryDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;

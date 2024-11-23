@@ -3,6 +3,7 @@ package uz.ilmnajot.post_article.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.ilmnajot.post_article.payload.UserDTO;
 import uz.ilmnajot.post_article.payload.AuthRequest;
@@ -22,7 +23,7 @@ public class AuthController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @PostMapping("/verifyEmail")
+    @PostMapping("/verify-email")
     public HttpEntity<ApiResponse> verifyEmail(@RequestParam String email, @RequestParam String emailCode) {
         ApiResponse apiResponse = authService.verifyEmail(email, emailCode);
         return ResponseEntity.ok(apiResponse);

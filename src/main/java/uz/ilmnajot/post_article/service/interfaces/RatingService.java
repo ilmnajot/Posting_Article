@@ -1,6 +1,5 @@
-package uz.ilmnajot.post_article.service;
+package uz.ilmnajot.post_article.service.interfaces;
 
-import org.springframework.stereotype.Service;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 
 

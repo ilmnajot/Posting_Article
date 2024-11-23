@@ -3,9 +3,9 @@ package uz.ilmnajot.post_article.service.auth;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.ilmnajot.post_article.entity.Role;
 import uz.ilmnajot.post_article.entity.User;
@@ -21,7 +21,7 @@ import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.repository.RoleRepository;
 import uz.ilmnajot.post_article.repository.UserRepository;
 import uz.ilmnajot.post_article.security.jwt.JwtProvider;
-import uz.ilmnajot.post_article.service.EmailService;
+import uz.ilmnajot.post_article.service.interfaces.EmailService;
 import uz.ilmnajot.post_article.utils.MessageKey;
 
 import java.sql.Timestamp;
@@ -47,8 +47,7 @@ public class AuthServiceImpl implements AuthService {
 
             if (user.getRole().getRole().equals(RoleName.IN_REGISTRATION)) {
                 userRepository.delete(user);
-            }
-            else if (user.getRole().getRole().equals(RoleName.USER)) {
+            } else if (user.getRole().getRole().equals(RoleName.USER)) {
             }
             throw new AlreadyExistsException("User already Registered", HttpStatus.BAD_REQUEST);
         }
@@ -66,10 +65,18 @@ public class AuthServiceImpl implements AuthService {
         Role roleUser = roleRepository.findByNameAndDeleteFalse(MessageKey.ROLE_USER).orElseThrow(
                 () -> new ResourceNotFoundException("Role not found", HttpStatus.NOT_FOUND));
         if (user.getEmailCode() != null && user.getEmailCode().equals(emailCode)) {
+
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            Timestamp expireTime = new Timestamp(user.getCreatedAt().getTime() + (15 * 60 * 1000));
+
+            if (now.after(expireTime)) {
+                throw new BadCredentialsException("Verification code has expired. Please request a new one.");
+            }
             user.setEnable(true);
             user.setRole(roleUser);
             user.setEmailCode(null);
             userRepository.save(user);
+
         }
         return new ApiResponse(true, "success", HttpStatus.OK, "User has been verified successfully");
     }
