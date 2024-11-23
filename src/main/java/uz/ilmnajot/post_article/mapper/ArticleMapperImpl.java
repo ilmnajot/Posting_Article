@@ -27,9 +27,9 @@ public class ArticleMapperImpl implements ArticleMapper {
 
     public Article toArticleEntity(ArticleDTO articleDTO) {
         User user = userRepository.findByIdAndDeleteFalse(articleDTO.getAuthorId()).orElseThrow(
-                () -> new ResourceNotFoundException(MessageKey.USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+                () -> new ResourceNotFoundException(MessageKey.USER_NOT_FOUND));
         Category category = categoryRepository.findByIdAndDeleteFalse(articleDTO.getCategoryId()).orElseThrow(
-                () -> new ResourceNotFoundException(MessageKey.CATEGORY_NOT_FOUND, HttpStatus.NOT_FOUND));
+                () -> new ResourceNotFoundException(MessageKey.CATEGORY_NOT_FOUND));
         Article article = new Article();
         article.setTitle(articleDTO.getTitle());
         article.setContent(articleDTO.getContent());
@@ -51,8 +51,9 @@ public class ArticleMapperImpl implements ArticleMapper {
     public Article toUpdateArticleEntity(Article article, ArticleDTO articleDTO) {
 
         User user = this.userRepository.findByIdAndDeleteFalse(articleDTO.getAuthorId()).orElseThrow(
-                () -> new ResourceNotFoundException("User not found", HttpStatus.NOT_FOUND));
-        Category category = this.categoryRepository.findByIdAndDeleteFalse(articleDTO.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException("Category not found", HttpStatus.NOT_FOUND));
+                () -> new ResourceNotFoundException("User not found"));
+        Category category = this.categoryRepository.findByIdAndDeleteFalse(articleDTO.getCategoryId()).orElseThrow(
+                () -> new ResourceNotFoundException("Category not found"));
 
         if (articleDTO.getTitle() != null) {
             article.setTitle(articleDTO.getTitle());

@@ -1,5 +1,4 @@
 package uz.ilmnajot.post_article.service;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.ilmnajot.post_article.entity.Article;
@@ -22,7 +21,11 @@ public class RatingServiceImpl implements RatingService {
     private final ArticleRepository articleRepository;
     private final RatingMapper ratingMapper;
 
-    public RatingServiceImpl(RatingRepository ratingRepository, UserRepository userRepository, ArticleRepository articleRepository, RatingMapper ratingMapper) {
+    public RatingServiceImpl(
+            RatingRepository ratingRepository,
+            UserRepository userRepository,
+            ArticleRepository articleRepository,
+            RatingMapper ratingMapper) {
         this.ratingRepository = ratingRepository;
         this.userRepository = userRepository;
         this.articleRepository = articleRepository;
@@ -32,8 +35,9 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public ApiResponse addRating(Long userId, Long articleId, boolean isLike) {
         User user = userRepository.findByIdAndDeleteFalse(userId).orElseThrow(
-                () -> new ResourceNotFoundException("User not found", HttpStatus.NOT_FOUND));
-        Article article = articleRepository.findByIdAndDeleteFalse(articleId).orElseThrow(() -> new ResourceNotFoundException("Article not found", HttpStatus.NOT_FOUND));
+                () -> new ResourceNotFoundException("User not found"));
+        Article article = articleRepository.findByIdAndDeleteFalse(articleId).orElseThrow(
+                () -> new ResourceNotFoundException("Article not found"));
         Rating rating = new Rating();
         rating.setArticle(article);
         rating.setUser(user);

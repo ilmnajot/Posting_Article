@@ -18,7 +18,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHOR')")
     @PostMapping("/addCategory")
     public HttpEntity<ApiResponse> addCategory(@RequestBody CategoryDTO categoryDTO) {
         ApiResponse apiResponse = categoryService.addCategory(categoryDTO);

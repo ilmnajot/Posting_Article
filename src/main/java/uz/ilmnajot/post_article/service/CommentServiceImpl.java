@@ -35,9 +35,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public ApiResponse addComment(CommentDTO commentDTO) {
         User user = userRepository.findByIdAndDeleteFalse(commentDTO.getUserId()).orElseThrow(()
-                -> new ResourceNotFoundException("Article not found with id: " + commentDTO.getArticleId(), HttpStatus.NOT_FOUND));
+                -> new ResourceNotFoundException("Article not found with id: " + commentDTO.getArticleId()));
         Article article = articleRepository.findByIdAndDeleteFalse(commentDTO.getArticleId()).orElseThrow(
-                () -> new ResourceNotFoundException("Article not found with id: " + commentDTO.getArticleId(), HttpStatus.NOT_FOUND));
+                () -> new ResourceNotFoundException("Article not found with id: " + commentDTO.getArticleId()));
         Comment comment = new Comment();
         comment.setComment(commentDTO.getComment());
         comment.setArticle(article);
@@ -93,6 +93,6 @@ public class CommentServiceImpl implements CommentService {
 
     private Comment getCommentById(Long commentId) {
         return commentRepository.findByIdAndDeleteFalse(commentId).orElseThrow(
-                () -> new ResourceNotFoundException("Comment not found with id: " + commentId, HttpStatus.NOT_FOUND));
+                () -> new ResourceNotFoundException("Comment not found with id: " + commentId));
     }
 }

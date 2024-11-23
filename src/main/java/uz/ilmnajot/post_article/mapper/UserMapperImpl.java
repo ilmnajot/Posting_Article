@@ -24,7 +24,7 @@ public class UserMapperImpl implements UserMapper {
     public User toUserEntity(UserDTO userDTO) {
         User user = new User();
         Role role = roleRepository.findByNameAndDeleteFalse("USER").orElseThrow(
-                () -> new ResourceNotFoundException("Role not found", HttpStatus.NOT_FOUND));
+                () -> new ResourceNotFoundException("Role not found"));
         user.setFName(userDTO.getFName());
         user.setLName(userDTO.getLName());
         user.setEmail(userDTO.getEmail());

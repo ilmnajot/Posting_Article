@@ -38,12 +38,10 @@ public class EmailServiceImpl implements EmailService {
         // Use a secure random code generator
         String generatedCode = String.format("%06d", new SecureRandom().nextInt(1_000_000));
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         user.setEmailCode(generatedCode);
         userRepository.save(user);
-
-        // Construct the email body
         String body = String.format("Your verification code is: %s. Please verify within the next 10 minutes.", generatedCode);
         sendEmail(email, subject, body);
     }

@@ -23,9 +23,9 @@ public class CommentMapperImpl implements CommentMapper {
 
     public Comment toCommentEntity(CommentDTO commentDTO) {
         Article article = articleRepository.findByIdAndDeleteFalse(commentDTO.getArticleId()).orElseThrow(()
-                -> new ResourceNotFoundException("Comment not found", HttpStatus.NOT_FOUND));
+                -> new ResourceNotFoundException("Comment not found"));
         User user = userRepository.findByIdAndDeleteFalse(commentDTO.getUserId()).orElseThrow(
-                () -> new ResourceNotFoundException("User not found", HttpStatus.NOT_FOUND));
+                () -> new ResourceNotFoundException("User not found"));
         Comment comment = new Comment();
         comment.setComment(commentDTO.getComment());
         comment.setArticle(article);
@@ -45,9 +45,9 @@ public class CommentMapperImpl implements CommentMapper {
     public Comment toUpdateCommentEntity(CommentDTO commentDTO, Comment comment) {
 
         Article article = articleRepository.findByIdAndDeleteFalse(commentDTO.getArticleId()).orElseThrow(()
-                -> new ResourceNotFoundException("Comment not found", HttpStatus.NOT_FOUND));
+                -> new ResourceNotFoundException("Comment not found"));
         User user = userRepository.findByIdAndDeleteFalse(commentDTO.getUserId()).orElseThrow(
-                () -> new ResourceNotFoundException("User not found", HttpStatus.NOT_FOUND));
+                () -> new ResourceNotFoundException("User not found"));
 
         if (commentDTO.getComment() != null) {
             comment.setComment(commentDTO.getComment());

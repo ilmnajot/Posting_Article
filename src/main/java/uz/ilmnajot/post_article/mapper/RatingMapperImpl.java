@@ -26,9 +26,9 @@ public class RatingMapperImpl implements RatingMapper {
     }
 
     public Rating toRatingEntity(RatingDTO ratingDTO) {
-        Article article = articleRepository.findByIdAndDeleteFalse(ratingDTO.getArticleId()).orElseThrow(() -> new ResourceNotFoundException("Article not found", NOT_FOUND));
+        Article article = articleRepository.findByIdAndDeleteFalse(ratingDTO.getArticleId()).orElseThrow(() -> new ResourceNotFoundException("Article not found"));
         User user = userRepository.findByIdAndDeleteFalse(ratingDTO.getUserId()).orElseThrow(()
-                -> new ResourceNotFoundException("User not found", NOT_FOUND));
+                -> new ResourceNotFoundException("User not found"));
         Rating rating = new Rating();
         rating.setArticle(article);
         rating.setUser(user);

@@ -29,7 +29,7 @@ public class ArticleServiceImpl implements ArticleService {
     public ApiResponse addArticle(ArticleDTO articleDTO) {
         Optional<Article> optionalArticle = articleRepository.findByTitleAndDeleteFalse(articleDTO.getTitle());
         if (optionalArticle.isPresent()) {
-            throw new AlreadyExistsException("Article already exists", HttpStatus.BAD_REQUEST);
+            throw new AlreadyExistsException("Article already exists");
         }
         Article articleEntity = articleMapper.toArticleEntity(articleDTO);
         Article saved = articleRepository.save(articleEntity);
@@ -40,7 +40,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ApiResponse getArticle(Long articleId) {
         Article article = articleRepository.findByIdAndDeleteFalse(articleId).orElseThrow(
-                () -> new ResourceNotFoundException("Article not found", HttpStatus.BAD_REQUEST));
+                () -> new ResourceNotFoundException("Article not found"));
         return new ApiResponse(true, "success", HttpStatus.OK, article);
     }
 
@@ -76,7 +76,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public ApiResponse deleteArticle(Long articleId) {
-        Article article = articleRepository.findByIdAndDeleteFalse(articleId).orElseThrow(() -> new ResourceNotFoundException("Article not found", HttpStatus.BAD_REQUEST));
+        Article article = articleRepository.findByIdAndDeleteFalse(articleId).orElseThrow(
+                () -> new ResourceNotFoundException("Article not found"));
         article.setDelete(true);
         articleRepository.save(article);
         return new ApiResponse(true, "success", HttpStatus.OK, "The Article has been deleted successfully");
@@ -85,7 +86,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ApiResponse updateArticle(Long articleId, ArticleDTO articleDTO) {
         Article article = articleRepository.findByIdAndDeleteFalse(articleId).orElseThrow(
-                () -> new ResourceNotFoundException("Article not found", HttpStatus.BAD_REQUEST));
+                () -> new ResourceNotFoundException("Article not found"));
         Article articleEntity = articleMapper.toUpdateArticleEntity(article, articleDTO);
         Article saved = articleRepository.save(articleEntity);
         ArticleDTO mapperArticleDTO = articleMapper.toArticleDTO(saved);

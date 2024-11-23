@@ -30,6 +30,7 @@ public class User extends AbstractEntity implements UserDetails {
     private String emailCode;// 6-digit email code to verify email
 
     private String password;
+
     @ManyToOne
     private Role role;
 
@@ -46,7 +47,7 @@ public class User extends AbstractEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+        return List.of(new SimpleGrantedAuthority(role.getRole().name()));
     }
 
     @Override

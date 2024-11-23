@@ -31,7 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
     public ApiResponse addCategory(CategoryDTO categoryDTO) {
         Optional<Category> optionalCategory = categoryRepository.findByNameAndDeleteFalse(categoryDTO.getName());
         if (optionalCategory.isPresent()) {
-            throw new AlreadyExistsException("Category already exists", HttpStatus.BAD_REQUEST);
+            throw new AlreadyExistsException("Category already exists");
         }
         Category categoryEntity = categoryMapper.toCategoryEntity(categoryDTO);
         Category saved = categoryRepository.save(categoryEntity);
@@ -96,6 +96,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     private Category getCategoryById(Long categoryId) {
         return categoryRepository.findByIdAndDeleteFalse(categoryId).orElseThrow(
-                () -> new ResourceNotFoundException(MessageKey.CATEGORY_NOT_FOUND, HttpStatus.NOT_FOUND));
+                () -> new ResourceNotFoundException(MessageKey.CATEGORY_NOT_FOUND));
     }
 }

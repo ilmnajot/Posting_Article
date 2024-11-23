@@ -49,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
                 userRepository.delete(user);
             } else if (user.getRole().getRole().equals(RoleName.USER)) {
             }
-            throw new AlreadyExistsException("User already Registered", HttpStatus.BAD_REQUEST);
+            throw new AlreadyExistsException("User already Registered");
         }
         User userEntity = userMapper.toUserEntity(userDTO);
         User addedUser = userRepository.save(userEntity);
@@ -61,9 +61,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ApiResponse verifyEmail(String email, String emailCode) {
         User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new ResourceNotFoundException("User not found", HttpStatus.NOT_FOUND));
+                () -> new ResourceNotFoundException("User not found"));
         Role roleUser = roleRepository.findByNameAndDeleteFalse(MessageKey.ROLE_USER).orElseThrow(
-                () -> new ResourceNotFoundException("Role not found", HttpStatus.NOT_FOUND));
+                () -> new ResourceNotFoundException("Role not found"));
         if (user.getEmailCode() != null && user.getEmailCode().equals(emailCode)) {
 
             Timestamp now = new Timestamp(System.currentTimeMillis());
@@ -89,7 +89,7 @@ public class AuthServiceImpl implements AuthService {
                 authRequest.getPassword()));
         User user = (User) authenticated.getPrincipal();
         User existUser = userRepository.findByEmail(user.getEmail()).orElseThrow(
-                () -> new ResourceNotFoundException(MessageKey.USER_NOT_FOUND, HttpStatus.BAD_REQUEST));
+                () -> new ResourceNotFoundException(MessageKey.USER_NOT_FOUND));
         String token = jwtProvider.generateAccessToken(existUser);
         AuthResponse authResponse = new AuthResponse();
         authResponse.setToken(token);
