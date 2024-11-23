@@ -15,6 +15,8 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import uz.ilmnajot.post_article.security.jwt.JwtFilter;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
@@ -45,8 +47,6 @@ public class SecurityConfig {
                                 "/configuration/security",
                                 "/api/auth/**")
                         .permitAll()
-//                        .requestMatchers("/api/categories/addCategory/**").hasAnyAuthority("ADMIN","AUTHOR")
-//                        .requestMatchers("/api/categories/getAllCategories/**").hasAnyAuthority("ADMIN","AUTHOR","USER")
                         .anyRequest()
                         .authenticated())
                 .authenticationProvider(authenticationProvider)
@@ -57,4 +57,5 @@ public class SecurityConfig {
                         .accessDeniedHandler(accessDeniedHandler));
         return http.build();
     }
+
 }
