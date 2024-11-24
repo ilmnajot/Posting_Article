@@ -33,6 +33,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authRequest -> authRequest
                         .requestMatchers(
                                 "/v2/api-docs",
@@ -45,7 +46,14 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/configuration/ui",
                                 "/configuration/security",
-                                "/api/auth/**")
+                                "/api/auth/**,",
+                                "/",
+                                "/login",
+                                "/sign-up",
+                                "/email-verify",
+                                "/verify-email",
+                                "/home",
+                                "/verification-success")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
@@ -54,7 +62,22 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(authenticationEntryPoint)
-                        .accessDeniedHandler(accessDeniedHandler));
+                        .accessDeniedHandler(accessDeniedHandler))
+                .formLogin(login -> login
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/home")
+                        .failureHandler(new CustomAuthenticationFailureHandler())
+                        .failureUrl("/login?error=true") //redirect to the login page
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")  // Add logout URL
+                        .logoutSuccessUrl("/login?logout")  // Redirect to login after logout
+                        .invalidateHttpSession(true)  // Invalidate the session
+                        .clearAuthentication(true)  // Clear authentication
+                        .permitAll()
+                );
         return http.build();
     }
 

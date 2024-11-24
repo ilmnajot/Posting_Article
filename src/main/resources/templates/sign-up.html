@@ -8,12 +8,12 @@
         body {
             margin-left: 720px;
             font-family: 'Arial', sans-serif;
-            /*background: linear-gradient(to right, #6dd5ed, #2193b0);*/
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: url("/static/register.png") no-repeat fixed;
+            background: no-repeat  fixed;
+            background-image: url("/register.png");
             background-size: contain;
 
         }
@@ -76,16 +76,15 @@
     </style>
 </head>
 <body>
-
 <div class="register-container">
     <h1>Register</h1>
 
-    <form th:action="@{/api/auth/sign-up}" method="post" th:object="${user}">
+    <form th:action="@{/sign-up}" method="post" th:object="${user}">
         <!-- First Name -->
-        <input type="text" th:field="*{fName}" placeholder="Enter your first name" required>
+        <input type="text" th:field="*{FName}" placeholder="Enter your first name" required>
 
         <!-- Last Name -->
-        <input type="text" th:field="*{lName}" placeholder="Enter your last name" required>
+        <input type="text" th:field="*{LName}" placeholder="Enter your last name" required>
 
         <!-- Email -->
         <input type="email" th:field="*{email}" placeholder="Enter your email" required>
@@ -95,9 +94,14 @@
 
         <input type="submit" value="Register">
     </form>
-
-    <a href="${/login}">Already have an account? Login here</a>
-
+    <div th:if="${error}" class="alert alert-danger" role="alert">
+        <p th:text="${error}"></p>
+        <p>
+            <a th:href="@{/login}" class="text-primary">Already registered? Log in here.</a>
+            <br>
+            <a th:href="@{/forgot-password}" class="text-primary">Forgot your password? Reset it here.</a>
+        </p>
+    </div>
 </div>
 
 </body>

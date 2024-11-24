@@ -14,7 +14,7 @@
             align-items: center;
             min-height: 100vh;
             /*background-color: #f8f9fa;*/
-            background: url("/static/login.jpg") no-repeat right center fixed;
+            background: url("/login.jpg") no-repeat right center fixed;
             background-size: contain;
             margin: 0;
         }
@@ -83,7 +83,7 @@
         <h3>Login</h3>
     </div>
     <div class="card-body">
-        <form method="post" th:action="@{/api/auth/login}" class="form-horizontal">
+        <form method="post" th:action="@{/login}" class="form-horizontal">
             <div class="mb-3">
                 <label for="username" class="form-label">Email *</label>
                 <input type="text" id="username" name="username" class="form-control" placeholder="Enter your email" required>
@@ -95,7 +95,7 @@
             <div class="mb-3">
                 <button type="submit" class="btn btn-primary">Login</button>
             </div>
-            <p class="form-text">Not registered? <a href="${/sign-up}">Sign up here</a></p>
+            <p class="form-text">Not registered? <a th:href="@{/sign-up}">Sign up here</a></p>
         </form>
     </div>
 </div>

@@ -70,15 +70,17 @@ public class AuthServiceImpl implements AuthService {
             Timestamp expireTime = new Timestamp(user.getCreatedAt().getTime() + (15 * 60 * 1000));
 
             if (now.after(expireTime)) {
-                throw new BadCredentialsException("Verification code has expired. Please request a new one.");
+                return new ApiResponse(false, "Verification code has expired. Please request a new one.", HttpStatus.BAD_REQUEST, null);
             }
             user.setEnable(true);
             user.setRole(roleUser);
             user.setEmailCode(null);
             userRepository.save(user);
 
+            return new ApiResponse(true, "success", HttpStatus.OK, "User has been verified successfully");
+        } else {
+            return new ApiResponse(false, "Invalid verification code. Please try again.", HttpStatus.BAD_REQUEST, null);
         }
-        return new ApiResponse(true, "success", HttpStatus.OK, "User has been verified successfully");
     }
 
 

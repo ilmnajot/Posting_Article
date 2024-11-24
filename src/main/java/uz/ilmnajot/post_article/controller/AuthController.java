@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import uz.ilmnajot.post_article.payload.UserDTO;
 import uz.ilmnajot.post_article.payload.AuthRequest;
@@ -34,4 +36,6 @@ public class AuthController {
         ApiResponse login = authService.login(userDTO);
         return ResponseEntity.ok(login);
     }
+
+
 }
