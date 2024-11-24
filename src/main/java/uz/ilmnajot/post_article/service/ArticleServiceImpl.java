@@ -6,6 +6,7 @@ import uz.ilmnajot.post_article.exception.AlreadyExistsException;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
 import uz.ilmnajot.post_article.mapper.ArticleMapper;
 import uz.ilmnajot.post_article.payload.ArticleDTO;
+import uz.ilmnajot.post_article.payload.ArticleResponseDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.repository.ArticleRepository;
 import uz.ilmnajot.post_article.service.interfaces.ArticleService;
@@ -33,7 +34,7 @@ public class ArticleServiceImpl implements ArticleService {
         }
         Article articleEntity = articleMapper.toArticleEntity(articleDTO);
         Article saved = articleRepository.save(articleEntity);
-        ArticleDTO mapperArticleDTO = articleMapper.toArticleDTO(saved);
+        ArticleResponseDTO mapperArticleDTO = articleMapper.toArticleDTO(saved);
         return new ApiResponse(true, "success", HttpStatus.CREATED, mapperArticleDTO);
     }
 
@@ -47,7 +48,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ApiResponse getAllArticles() {
         List<Article> articleList = articleRepository.findAll();
-        List<ArticleDTO> articleDTOList = new ArrayList<>();
+        List<ArticleResponseDTO> articleDTOList = new ArrayList<>();
         for (Article article : articleList) {
             articleDTOList.add(articleMapper.toArticleDTO(article));
         }
@@ -57,7 +58,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ApiResponse getActiveArticle() {
         List<Article> articleList = articleRepository.findAllByDeleteIsFalse();
-        List<ArticleDTO> articleDTOList = new ArrayList<>();
+        List<ArticleResponseDTO> articleDTOList = new ArrayList<>();
         for (Article article : articleList) {
             articleDTOList.add(articleMapper.toArticleDTO(article));
         }
@@ -67,7 +68,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ApiResponse getAllDeletedArticles() {
         List<Article> articleList = articleRepository.findAllByDeleteIsTrue();
-        List<ArticleDTO> articleDTOList = new ArrayList<>();
+        List<ArticleResponseDTO> articleDTOList = new ArrayList<>();
         for (Article article : articleList) {
             articleDTOList.add(articleMapper.toArticleDTO(article));
         }
@@ -89,7 +90,7 @@ public class ArticleServiceImpl implements ArticleService {
                 () -> new ResourceNotFoundException("Article not found"));
         Article articleEntity = articleMapper.toUpdateArticleEntity(article, articleDTO);
         Article saved = articleRepository.save(articleEntity);
-        ArticleDTO mapperArticleDTO = articleMapper.toArticleDTO(saved);
+        ArticleResponseDTO mapperArticleDTO = articleMapper.toArticleDTO(saved);
         return new ApiResponse(true, "success", HttpStatus.OK, mapperArticleDTO);
     }
 

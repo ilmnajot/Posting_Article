@@ -53,7 +53,10 @@ public class SecurityConfig {
                                 "/email-verify",
                                 "/verify-email",
                                 "/home",
-                                "/verification-success")
+                                "/verification-success",
+                                "/addCategory",
+                                "/addArticle",
+                                "/category-list")
                         .permitAll()
                         .anyRequest()
                         .authenticated())

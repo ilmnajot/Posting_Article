@@ -7,6 +7,7 @@ import uz.ilmnajot.post_article.entity.Category;
 import uz.ilmnajot.post_article.entity.User;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
 import uz.ilmnajot.post_article.payload.ArticleDTO;
+import uz.ilmnajot.post_article.payload.ArticleResponseDTO;
 import uz.ilmnajot.post_article.repository.ArticleRepository;
 import uz.ilmnajot.post_article.repository.CategoryRepository;
 import uz.ilmnajot.post_article.repository.UserRepository;
@@ -38,8 +39,9 @@ public class ArticleMapperImpl implements ArticleMapper {
         return article;
     }
 
-    public ArticleDTO toArticleDTO(Article article) {
-        ArticleDTO articleDTO = new ArticleDTO();
+    public ArticleResponseDTO toArticleDTO(Article article) {
+        ArticleResponseDTO articleDTO = new ArticleResponseDTO();
+        articleDTO.setId(article.getId());
         articleDTO.setTitle(article.getTitle());
         articleDTO.setTitle(article.getTitle());
         articleDTO.setContent(article.getContent());

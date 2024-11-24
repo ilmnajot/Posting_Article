@@ -2,10 +2,11 @@ package uz.ilmnajot.post_article.mapper;
 
 import uz.ilmnajot.post_article.entity.Category;
 import uz.ilmnajot.post_article.payload.CategoryDTO;
+import uz.ilmnajot.post_article.payload.CategoryResponseDTO;
 
 public interface CategoryMapper {
 
-    CategoryDTO toCategoryDTO(Category category);
+    CategoryResponseDTO toCategoryDTO(Category category);
 
     Category toCategoryEntity(CategoryDTO categoryDTO);
 

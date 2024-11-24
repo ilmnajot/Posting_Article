@@ -1,5 +1,6 @@
 package uz.ilmnajot.post_article.service;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.ilmnajot.post_article.entity.Category;
@@ -7,6 +8,7 @@ import uz.ilmnajot.post_article.exception.AlreadyExistsException;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
 import uz.ilmnajot.post_article.mapper.CategoryMapper;
 import uz.ilmnajot.post_article.payload.CategoryDTO;
+import uz.ilmnajot.post_article.payload.CategoryResponseDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.repository.CategoryRepository;
 import uz.ilmnajot.post_article.service.interfaces.CategoryService;
@@ -35,21 +37,21 @@ public class CategoryServiceImpl implements CategoryService {
         }
         Category categoryEntity = categoryMapper.toCategoryEntity(categoryDTO);
         Category saved = categoryRepository.save(categoryEntity);
-        CategoryDTO mapperCategoryDTO = categoryMapper.toCategoryDTO(saved);
+        CategoryResponseDTO mapperCategoryDTO = categoryMapper.toCategoryDTO(saved);
         return new ApiResponse(true, "success", HttpStatus.CREATED, mapperCategoryDTO);
     }
 
     @Override
     public ApiResponse getCategory(Long categoryId) {
         Category category = getCategoryById(categoryId);
-        CategoryDTO categoryDTO = categoryMapper.toCategoryDTO(category);
+        CategoryResponseDTO categoryDTO = categoryMapper.toCategoryDTO(category);
         return new ApiResponse(true, "success", HttpStatus.OK, categoryDTO);
     }
 
     @Override
     public ApiResponse getAllCategories() {
         List<Category> categoryList = categoryRepository.findAll();
-        List<CategoryDTO> categoryDTOList = new ArrayList<>();
+        List<CategoryResponseDTO> categoryDTOList = new ArrayList<>();
         for (Category category : categoryList) {
             categoryDTOList.add(categoryMapper.toCategoryDTO(category));
         }
@@ -59,7 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public ApiResponse getAllExistsCategories() {
         List<Category> categoryList = categoryRepository.findAllByDeleteIsFalse();
-        List<CategoryDTO> categoryDTOList = new ArrayList<>();
+        List<CategoryResponseDTO> categoryDTOList = new ArrayList<>();
         for (Category category : categoryList) {
             categoryDTOList.add(categoryMapper.toCategoryDTO(category));
         }
@@ -71,7 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = getCategoryById(categoryId);
         category.setDelete(true);
         Category saved = categoryRepository.save(category);
-        CategoryDTO categoryDTO = categoryMapper.toCategoryDTO(saved);
+        CategoryResponseDTO categoryDTO = categoryMapper.toCategoryDTO(saved);
         return new ApiResponse(true, "success", HttpStatus.OK, "Category has been deleted: " + categoryDTO);
     }
 
@@ -80,14 +82,14 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = getCategoryById(categoryId);
         Category updateEntity = categoryMapper.toUpdateEntity(category, categoryDTO);
         Category saved = categoryRepository.save(updateEntity);
-        CategoryDTO categoryDTOSaved = categoryMapper.toCategoryDTO(saved);
+        CategoryResponseDTO categoryDTOSaved = categoryMapper.toCategoryDTO(saved);
         return new ApiResponse(true, "success", HttpStatus.OK, "Category has been updated: " + categoryDTOSaved);
     }
 
     @Override
     public ApiResponse getAllRemovedCategories() {
         List<Category> categoryList = categoryRepository.findAllByDeleteIsTrue();
-        List<CategoryDTO> categoryDTOList = new ArrayList<>();
+        List<CategoryResponseDTO> categoryDTOList = new ArrayList<>();
         for (Category category : categoryList) {
             categoryDTOList.add(categoryMapper.toCategoryDTO(category));
         }

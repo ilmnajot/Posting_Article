@@ -3,6 +3,7 @@ package uz.ilmnajot.post_article.mapper;
 import org.springframework.stereotype.Component;
 import uz.ilmnajot.post_article.entity.Category;
 import uz.ilmnajot.post_article.payload.CategoryDTO;
+import uz.ilmnajot.post_article.payload.CategoryResponseDTO;
 
 @Component
 public class CategoryMapperImpl implements CategoryMapper {
@@ -14,8 +15,8 @@ public class CategoryMapperImpl implements CategoryMapper {
         return category;
     }
 
-    public CategoryDTO toCategoryDTO(Category category) {
-        CategoryDTO categoryDTO = new CategoryDTO();
+    public CategoryResponseDTO toCategoryDTO(Category category) {
+        CategoryResponseDTO categoryDTO = new CategoryResponseDTO();
         categoryDTO.setId(category.getId());
         categoryDTO.setName(category.getName());
         categoryDTO.setDescription(category.getDescription());
