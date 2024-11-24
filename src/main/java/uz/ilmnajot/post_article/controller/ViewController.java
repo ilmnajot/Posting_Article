@@ -143,6 +143,6 @@ public class ViewController {
         model.addAttribute("categories", categoryService.getAllExistsCategories());
         return "category-list";
     }
-
+ //todo 1. add article, 2. inside category article list, 3...
 
 }
