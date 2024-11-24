@@ -59,13 +59,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ApiResponse getAllExistsCategories() {
+    public List<CategoryResponseDTO> getAllExistsCategories() {
         List<Category> categoryList = categoryRepository.findAllByDeleteIsFalse();
         List<CategoryResponseDTO> categoryDTOList = new ArrayList<>();
         for (Category category : categoryList) {
             categoryDTOList.add(categoryMapper.toCategoryDTO(category));
         }
-        return new ApiResponse(true, "success", HttpStatus.OK, categoryDTOList);
+        return categoryDTOList;
     }
 
     @Override

@@ -16,6 +16,8 @@ import uz.ilmnajot.post_article.service.auth.AuthService;
 import uz.ilmnajot.post_article.service.interfaces.ArticleService;
 import uz.ilmnajot.post_article.service.interfaces.CategoryService;
 
+import java.util.List;
+
 @RequestMapping("/")
 @Controller
 public class ViewController {
@@ -49,7 +51,7 @@ public class ViewController {
     @PostMapping("/sign-up")
     public String signUpUser(@ModelAttribute UserDTO userDTO, Model model) {
         ApiResponse user = authService.signUp(userDTO);
-        if (user.isSuccess()){
+        if (user.isSuccess()) {
             model.addAttribute("user", user);
             return "redirect:/email-verify?email=" + userDTO.getEmail();
         }
@@ -57,6 +59,7 @@ public class ViewController {
         model.addAttribute("user", userDTO);
         return "sign-up";
     }
+
     @GetMapping("/email-verify")
     public String showVerificationPage(@RequestParam String email, Model model) {
         model.addAttribute("email", email);
@@ -81,14 +84,14 @@ public class ViewController {
 
 //************************CATEGORY********************//
 
-//    @PreAuthorize("hasAnyAuthority('ADMIN', 'AUTHOR')")
+    //    @PreAuthorize("hasAnyAuthority('ADMIN', 'AUTHOR')")
     @GetMapping("/addCategory")
     public String showCategoryPage(Model model) {
         model.addAttribute("category", new CategoryDTO());
         return "category";
     }
 
-//    @PreAuthorize("hasAnyAuthority('ADMIN', 'AUTHOR')")
+    //    @PreAuthorize("hasAnyAuthority('ADMIN', 'AUTHOR')")
     @PostMapping("/addCategory")
     public String addCategory(@ModelAttribute("category") @Valid CategoryDTO categoryDTO,
                               BindingResult result,
@@ -108,7 +111,7 @@ public class ViewController {
 
     @GetMapping("/category-list")
     public String getCategories(Model model) {
-        ApiResponse categories = categoryService.getAllExistsCategories();
+        List<CategoryResponseDTO> categories = categoryService.getAllExistsCategories();
         model.addAttribute("categories", categories);
         return "category-list";
     }
@@ -118,7 +121,7 @@ public class ViewController {
     @GetMapping("/addArticle")
     public String showAddArticlePage(Model model) {
         model.addAttribute("article", new ArticleDTO());
-        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("categories", categoryService.getAllExistsCategories());
         return "add-article";
     }
 
@@ -127,7 +130,7 @@ public class ViewController {
                              BindingResult result,
                              Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("categories", categoryService.getAllExistsCategories());
             return "add-article";
         }
         try {
@@ -137,11 +140,9 @@ public class ViewController {
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
-        model.addAttribute("categories", categoryService.getAllCategories());
-        return "add-article";
+        model.addAttribute("categories", categoryService.getAllExistsCategories());
+        return "category-list";
     }
-
-
 
 
 }

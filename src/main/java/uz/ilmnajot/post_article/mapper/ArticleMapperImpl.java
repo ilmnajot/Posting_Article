@@ -1,6 +1,7 @@
 package uz.ilmnajot.post_article.mapper;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import uz.ilmnajot.post_article.entity.Article;
 import uz.ilmnajot.post_article.entity.Category;
@@ -27,14 +28,15 @@ public class ArticleMapperImpl implements ArticleMapper {
     }
 
     public Article toArticleEntity(ArticleDTO articleDTO) {
-        User user = userRepository.findByIdAndDeleteFalse(articleDTO.getAuthorId()).orElseThrow(
-                () -> new ResourceNotFoundException(MessageKey.USER_NOT_FOUND));
+//        User user = userRepository.findByIdAndDeleteFalse(articleDTO.getAuthorId()).orElseThrow(
+//                () -> new ResourceNotFoundException(MessageKey.USER_NOT_FOUND));
+//        User currentUser  = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Category category = categoryRepository.findByIdAndDeleteFalse(articleDTO.getCategoryId()).orElseThrow(
                 () -> new ResourceNotFoundException(MessageKey.CATEGORY_NOT_FOUND));
         Article article = new Article();
         article.setTitle(articleDTO.getTitle());
         article.setContent(articleDTO.getContent());
-        article.setAuthor(user);
+//        article.setAuthor(user);
         article.setCategory(category);
         return article;
     }
@@ -43,17 +45,16 @@ public class ArticleMapperImpl implements ArticleMapper {
         ArticleResponseDTO articleDTO = new ArticleResponseDTO();
         articleDTO.setId(article.getId());
         articleDTO.setTitle(article.getTitle());
-        articleDTO.setTitle(article.getTitle());
         articleDTO.setContent(article.getContent());
-        articleDTO.setAuthorId(article.getAuthor().getId());
+//        articleDTO.setAuthorId(article.getAuthor().getId());
         articleDTO.setCategoryId(article.getCategory().getId());
         return articleDTO;
     }
 
     public Article toUpdateArticleEntity(Article article, ArticleDTO articleDTO) {
 
-        User user = this.userRepository.findByIdAndDeleteFalse(articleDTO.getAuthorId()).orElseThrow(
-                () -> new ResourceNotFoundException("User not found"));
+//        User user = this.userRepository.findByIdAndDeleteFalse(articleDTO.getAuthorId()).orElseThrow(
+//                () -> new ResourceNotFoundException("User not found"));
         Category category = this.categoryRepository.findByIdAndDeleteFalse(articleDTO.getCategoryId()).orElseThrow(
                 () -> new ResourceNotFoundException("Category not found"));
 
@@ -63,9 +64,9 @@ public class ArticleMapperImpl implements ArticleMapper {
         if (articleDTO.getContent() != null) {
             article.setContent(articleDTO.getContent());
         }
-        if (articleDTO.getAuthorId() != null) {
-            article.setAuthor(user);
-        }
+//        if (articleDTO.getAuthorId() != null) {
+//            article.setAuthor(user);
+//        }
         if (articleDTO.getCategoryId() != null) {
             article.setCategory(category);
         }

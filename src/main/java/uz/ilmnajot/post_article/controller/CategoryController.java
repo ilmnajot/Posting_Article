@@ -5,8 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.ilmnajot.post_article.payload.CategoryDTO;
+import uz.ilmnajot.post_article.payload.CategoryResponseDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.service.interfaces.CategoryService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -41,9 +44,9 @@ public class CategoryController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/getAllExistsCategories")
-    public HttpEntity<ApiResponse> getAllExistsCategories() {
-        ApiResponse allExistsCategories = categoryService.getAllExistsCategories();
-        return ResponseEntity.ok(allExistsCategories);
+    public HttpEntity<?> getAllExistsCategories() {
+        List<CategoryResponseDTO> allExistsCategories = categoryService.getAllExistsCategories();
+        return ResponseEntity.ok(List.of(allExistsCategories));
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

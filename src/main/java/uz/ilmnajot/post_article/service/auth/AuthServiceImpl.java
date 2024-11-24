@@ -98,6 +98,4 @@ public class AuthServiceImpl implements AuthService {
         authResponse.setUser(existUser);
         return new ApiResponse(true, "success", HttpStatus.OK, authResponse);
     }
-
-
 }

@@ -19,10 +19,10 @@ public class ArticleDTO {
         @NotEmpty(message = "Content cannot be empty")
         private String content;
 
-        @NotNull(message = "Author ID cannot be null")
-        private Long authorId;
+////        @NotNull(message = "Author ID cannot be null")
+//        private Long authorId;
 
-        @NotNull(message = "Category ID cannot be null")
+//        @NotNull(message = "Category ID cannot be null")
         private Long categoryId;
 
 

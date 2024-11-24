@@ -10,6 +10,6 @@ public class ArticleResponseDTO {
     private Long id;
     private String title;
     private String content;
-    private Long authorId;
+//    private Long authorId;
     private Long categoryId;
 }

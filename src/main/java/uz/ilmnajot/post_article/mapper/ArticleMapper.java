@@ -7,7 +7,6 @@ import uz.ilmnajot.post_article.payload.ArticleResponseDTO;
 public interface ArticleMapper {
 
     Article toArticleEntity(ArticleDTO articleDTO);
-
     ArticleResponseDTO toArticleDTO(Article article);
     Article toUpdateArticleEntity(Article article, ArticleDTO articleDTO);
 }

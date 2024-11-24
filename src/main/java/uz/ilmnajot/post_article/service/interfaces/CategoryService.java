@@ -5,6 +5,8 @@ import uz.ilmnajot.post_article.payload.CategoryDTO;
 import uz.ilmnajot.post_article.payload.CategoryResponseDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 
+import java.util.List;
+
 public interface CategoryService {
     ApiResponse addCategory(CategoryDTO categoryDTO);
 
@@ -12,7 +14,7 @@ public interface CategoryService {
 
     ApiResponse getAllCategories();
 
-    ApiResponse getAllExistsCategories();
+    List<CategoryResponseDTO> getAllExistsCategories();
 
     ApiResponse deleteCategory(Long categoryId);
 
