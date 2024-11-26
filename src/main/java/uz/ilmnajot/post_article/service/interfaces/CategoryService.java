@@ -1,6 +1,6 @@
 package uz.ilmnajot.post_article.service.interfaces;
 
-import jakarta.validation.Valid;
+import org.springframework.web.multipart.MultipartFile;
 import uz.ilmnajot.post_article.payload.CategoryDTO;
 import uz.ilmnajot.post_article.payload.CategoryResponseDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
@@ -8,7 +8,7 @@ import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import java.util.List;
 
 public interface CategoryService {
-    ApiResponse addCategory(CategoryDTO categoryDTO);
+    ApiResponse addCategory(CategoryDTO categoryDTO, MultipartFile image);
 
     ApiResponse getCategory(Long categoryId);
 

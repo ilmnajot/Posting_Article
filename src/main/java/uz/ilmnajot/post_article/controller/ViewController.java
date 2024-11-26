@@ -1,12 +1,11 @@
 package uz.ilmnajot.post_article.controller;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import uz.ilmnajot.post_article.payload.ArticleDTO;
 import uz.ilmnajot.post_article.payload.CategoryDTO;
 import uz.ilmnajot.post_article.payload.CategoryResponseDTO;
@@ -94,13 +93,14 @@ public class ViewController {
     //    @PreAuthorize("hasAnyAuthority('ADMIN', 'AUTHOR')")
     @PostMapping("/addCategory")
     public String addCategory(@ModelAttribute("category") @Valid CategoryDTO categoryDTO,
+                              @RequestParam("image") MultipartFile image,
                               BindingResult result,
                               Model model) {
         if (result.hasErrors()) {
             return "category"; // Show errors on the same form
         }
         try {
-            categoryService.addCategory(categoryDTO);
+            categoryService.addCategory(categoryDTO, image);
             model.addAttribute("success", "Category added successfully!");
             model.addAttribute("category", new CategoryDTO()); // Clear the form
         } catch (Exception e) {
@@ -143,6 +143,7 @@ public class ViewController {
         model.addAttribute("categories", categoryService.getAllExistsCategories());
         return "category-list";
     }
- //todo 1. add article, 2. inside category article list, 3...
+
+
 
 }

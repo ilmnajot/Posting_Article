@@ -1,5 +1,6 @@
 package uz.ilmnajot.post_article.security.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,7 +57,8 @@ public class SecurityConfig {
                                 "/verification-success",
                                 "/addCategory",
                                 "/addArticle",
-                                "/category-list")
+                                "/category-list",
+                                "/images/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
@@ -75,8 +77,12 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")  // Add logout URL
-                        .logoutSuccessUrl("/login?logout")  // Redirect to login after logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessHandler(((request, response, authentication) ->{
+                            response.setStatus(HttpServletResponse.SC_OK);
+                            response.sendRedirect("/login?logout");
+                        }))// Add logout URL
+//                        .logoutSuccessUrl("/login?logout")  // Redirect to login after logout
                         .invalidateHttpSession(true)  // Invalidate the session
                         .clearAuthentication(true)  // Clear authentication
                         .permitAll()

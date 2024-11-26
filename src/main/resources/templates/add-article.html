@@ -124,12 +124,12 @@
 
         <!-- Select Category -->
         <div class="form-field">
-            <label for="category">Category:</label>
-            <select th:field="*{categoryId}" id="category" required>
-                <option value="" disabled selected>Select category</option>
-                <option th:each="category : ${categories}"
-                        th:value="${category.id}"
-                        th:text="${category.name}"></option>
+            <label for="topic">Topic:</label>
+            <select th:field="*{topicId}" id="topic" required>
+                <option value="" disabled selected>Select Topic</option>
+                <option th:each="topic : ${topics}"
+                        th:value="${topic.id}"
+                        th:text="${topic.name}"></option>
             </select>
             <div th:if="${#fields.hasErrors('categoryId')}" class="alert error">
                 <p th:each="err : ${#fields.errors('categoryId')}" th:text="${err}"></p>

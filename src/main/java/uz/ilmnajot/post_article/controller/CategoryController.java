@@ -4,6 +4,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import uz.ilmnajot.post_article.payload.CategoryDTO;
 import uz.ilmnajot.post_article.payload.CategoryResponseDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
@@ -23,8 +24,8 @@ public class CategoryController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','AUTHOR')")
     @PostMapping("/addCategory")
-    public HttpEntity<ApiResponse> addCategory(@RequestBody CategoryDTO categoryDTO) {
-        ApiResponse apiResponse = categoryService.addCategory(categoryDTO);
+    public HttpEntity<ApiResponse> addCategory(@RequestBody CategoryDTO categoryDTO, @RequestParam("image")MultipartFile image) {
+        ApiResponse apiResponse = categoryService.addCategory(categoryDTO,image);
         return ResponseEntity.ok(apiResponse);
     }
 

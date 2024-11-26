@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subcategories</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            padding: 20px;
+        }
+        .subcategory-container {
+            margin: 20px;
+        }
+        .subcategory {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .subcategory h2 {
+            margin-bottom: 10px;
+        }
+        .articles ul {
+            list-style: none;
+            padding: 0;
+        }
+        .articles li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Subcategories</h1>
+<div class="subcategory-container">
+    <div th:each="subcategory : ${subCategories}" class="subcategory">
+        <h2 th:text="${subcategory.name}"></h2>
+        <p th:text="${subcategory.description}"></p>
+        <div class="articles">
+            <h3>Articles:</h3>
+            <ul>
+                <li th:each="article : ${subcategory.articles}">
+                    <a th:href="@{/article/{id}(id=${article.id})}" th:text="${article.title}"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

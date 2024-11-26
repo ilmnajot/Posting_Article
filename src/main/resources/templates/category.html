@@ -76,7 +76,8 @@
 <div class="form-container">
     <h1>Add Category</h1>
 
-    <form th:action="@{/addCategory}" method="post" th:object="${category}">
+    <!-- Note: Add enctype="multipart/form-data" to support file uploads -->
+    <form th:action="@{/addCategory}" method="post" enctype="multipart/form-data" th:object="${category}">
         <!-- Category Name -->
         <div class="form-field">
             <label for="name">Name:</label>
@@ -87,6 +88,12 @@
         <div class="form-field">
             <label for="description">Description:</label>
             <textarea th:field="*{description}" id="description" rows="4" placeholder="Category description"></textarea>
+        </div>
+
+        <!-- Category Image -->
+        <div class="form-field">
+            <label for="image">Image:</label>
+            <input type="file" id="image" name="image" accept="image/*">
         </div>
 
         <!-- Display Error Message -->

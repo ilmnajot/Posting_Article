@@ -1,8 +1,10 @@
 package uz.ilmnajot.post_article.service;
 
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import uz.ilmnajot.post_article.entity.Category;
 import uz.ilmnajot.post_article.exception.AlreadyExistsException;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
@@ -14,9 +16,13 @@ import uz.ilmnajot.post_article.repository.CategoryRepository;
 import uz.ilmnajot.post_article.service.interfaces.CategoryService;
 import uz.ilmnajot.post_article.utils.MessageKey;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -24,21 +30,46 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
+    @Value("${upload.dir}")
+    private String imageDirectory;
+
     public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
     }
 
     @Override
-    public ApiResponse addCategory(CategoryDTO categoryDTO) {
+    public ApiResponse addCategory(CategoryDTO categoryDTO, MultipartFile image) {
         Optional<Category> optionalCategory = categoryRepository.findByNameAndDeleteFalse(categoryDTO.getName());
         if (optionalCategory.isPresent()) {
             throw new AlreadyExistsException("Category already exists");
         }
-        Category categoryEntity = categoryMapper.toCategoryEntity(categoryDTO);
+        String addedImage = addImage(image);
+        Category categoryEntity = categoryMapper.toCategoryEntity(categoryDTO, addedImage);
         Category saved = categoryRepository.save(categoryEntity);
         CategoryResponseDTO mapperCategoryDTO = categoryMapper.toCategoryDTO(saved);
         return new ApiResponse(true, "success", HttpStatus.CREATED, mapperCategoryDTO);
+    }
+
+    private String addImage(MultipartFile image) {
+        if (image == null || image.isEmpty()) {
+            return null;
+        }
+        try {
+            String imageFileName = image.getOriginalFilename();
+            if (imageFileName==null || imageFileName.trim().isEmpty()) {
+                throw new ResourceNotFoundException("Image name is invalid");
+            }
+            String replacedAll = imageFileName.replaceAll("[^a-zA-Z0-9._-]", "_");
+            String fileName = UUID.randomUUID() + "_" + replacedAll;
+            Path imagePath = Paths.get(imageDirectory, fileName);
+            Files.createDirectories(imagePath.getParent()); // Create directories if not exists
+            Files.write(imagePath, image.getBytes()); // Save the image
+            return "/images/" + fileName;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save image: " + e.getMessage());
+        }
+
     }
 
     @Override

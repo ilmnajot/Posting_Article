@@ -8,7 +8,7 @@ public interface CategoryMapper {
 
     CategoryResponseDTO toCategoryDTO(Category category);
 
-    Category toCategoryEntity(CategoryDTO categoryDTO);
+    Category toCategoryEntity(CategoryDTO categoryDTO, String imageURL);
 
     Category toUpdateEntity(Category category,CategoryDTO categoryDTO);
 }

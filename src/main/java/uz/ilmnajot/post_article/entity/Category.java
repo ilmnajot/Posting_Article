@@ -19,4 +19,7 @@ public class Category extends AbstractEntity {
     private String name;
 
     private String description;
+
+    private String imageURL;// image url to fetch an image.
+
 }
