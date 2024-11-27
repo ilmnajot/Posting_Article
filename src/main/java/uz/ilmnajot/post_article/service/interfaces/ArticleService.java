@@ -17,4 +17,6 @@ public interface ArticleService {
     ApiResponse deleteArticle(Long articleId);
 
     ApiResponse updateArticle(Long articleId, ArticleDTO articleDTO);
+
+    ApiResponse getArticlesByTopicId(Long topicId);
 }

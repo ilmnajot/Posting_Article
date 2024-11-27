@@ -94,4 +94,10 @@ public class ArticleServiceImpl implements ArticleService {
         return new ApiResponse(true, "success", HttpStatus.OK, mapperArticleDTO);
     }
 
+    @Override
+    public ApiResponse getArticlesByTopicId(Long topicId) {
+        List<Article> allByTopicId = articleRepository.findAllByTopic_Id(topicId);
+        return new ApiResponse(true, "success", HttpStatus.OK, allByTopicId);
+    }
+
 }

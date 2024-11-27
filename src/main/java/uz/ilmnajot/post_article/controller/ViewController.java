@@ -6,11 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import uz.ilmnajot.post_article.payload.ArticleDTO;
-import uz.ilmnajot.post_article.payload.CategoryDTO;
-import uz.ilmnajot.post_article.payload.CategoryResponseDTO;
-import uz.ilmnajot.post_article.payload.UserDTO;
+import uz.ilmnajot.post_article.payload.*;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
+import uz.ilmnajot.post_article.service.TopicService;
 import uz.ilmnajot.post_article.service.auth.AuthService;
 import uz.ilmnajot.post_article.service.interfaces.ArticleService;
 import uz.ilmnajot.post_article.service.interfaces.CategoryService;
@@ -24,11 +22,13 @@ public class ViewController {
     private final AuthService authService;
     private final CategoryService categoryService;
     private final ArticleService articleService;
+    private final TopicService topicService;
 
-    public ViewController(AuthService authService, CategoryService categoryService, ArticleService articleService) {
+    public ViewController(AuthService authService, CategoryService categoryService, ArticleService articleService, TopicService topicService) {
         this.authService = authService;
         this.categoryService = categoryService;
         this.articleService = articleService;
+        this.topicService = topicService;
     }
 
     @GetMapping("/home")
@@ -115,6 +115,42 @@ public class ViewController {
         model.addAttribute("categories", categories);
         return "category-list";
     }
+
+
+    //************************TOPIC********************//
+
+    //    @PreAuthorize("hasAnyAuthority('ADMIN', 'AUTHOR')")
+    @GetMapping("/addTopic")
+    public String showTopicPage(Model model) {
+        model.addAttribute("topic", new TopicRequestDTO());
+        return "category";
+    }
+
+    //    @PreAuthorize("hasAnyAuthority('ADMIN', 'AUTHOR')")
+    @PostMapping("/addTopic")
+    public String addTopic(@ModelAttribute("topic") @Valid TopicRequestDTO topicRequestDTO,
+                              BindingResult result,
+                              Model model) {
+        if (result.hasErrors()) {
+            return "topic"; // Show errors on the same form
+        }
+        try {
+            ApiResponse topic = topicService.addTopic(topicRequestDTO);
+            model.addAttribute("success", "Topic added successfully!");
+            model.addAttribute("topic", topic); // Clear the form
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+        }
+        return "redirect:/topic-list?success";
+    }
+
+    @GetMapping("/topic-list")
+    public String getTopics(Model model) {
+        List<TopicResponseDTO> allTopics = topicService.getAllTopics();
+        model.addAttribute("topics", allTopics);
+        return "topic-list";
+    }
+
 
 
     //************************ARTICLE********************//

@@ -5,6 +5,7 @@ import uz.ilmnajot.post_article.entity.Category;
 import uz.ilmnajot.post_article.entity.Topic;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
 import uz.ilmnajot.post_article.payload.TopicRequestDTO;
+import uz.ilmnajot.post_article.payload.TopicResponseDTO;
 import uz.ilmnajot.post_article.repository.CategoryRepository;
 
 @Component
@@ -28,8 +29,9 @@ public class TopicMapperImpl implements TopicMapper {
     }
 
     @Override
-    public TopicRequestDTO toTopicDTO(Topic topic) {
-        TopicRequestDTO dto = new TopicRequestDTO();
+    public TopicResponseDTO toTopicDTO(Topic topic) {
+        TopicResponseDTO dto = new TopicResponseDTO();
+        dto.setId(topic.getId());
         dto.setTitle(topic.getTitle());
         dto.setDescription(topic.getDescription());
         dto.setCategoryId(topic.getCategory().getId());

@@ -66,4 +66,9 @@ public class ArticleController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @GetMapping("/getArticlesByTopicId/{topicId}")
+    public HttpEntity<ApiResponse> getArticlesByTopicId(@PathVariable(name = "topicId") Long topicId) {
+        articleService.getArticlesByTopicId(topicId);
+    }
+
 }

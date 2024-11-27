@@ -67,4 +67,10 @@ public class TopicController {
         ApiResponse apiResponse = topicService.updateTopic(topicId, topicRequestDTO);
         return ResponseEntity.ok(apiResponse);
     }
+
+    @GetMapping("/getTopicsByCategoryId/{categoryId}")
+    public HttpEntity<ApiResponse> getAllTopicsByCategory(@PathVariable("categoryId")Long categoryId) {
+        topicService.getTopicsByCategoryId(categoryId);
+
+    }
 }

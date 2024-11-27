@@ -14,5 +14,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     Optional<Article> findByIdAndDeleteFalse(Long articleId);
     List<Article> findAllByDeleteIsFalse();
     List<Article> findAllByDeleteIsTrue();
+    List<Article> findAllByTopic_Id(Long topicId);
 
 }
