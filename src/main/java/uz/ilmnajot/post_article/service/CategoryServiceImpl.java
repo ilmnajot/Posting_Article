@@ -1,6 +1,7 @@
 package uz.ilmnajot.post_article.service;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
@@ -33,10 +35,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Value("${upload.dir}")
     private String imageDirectory;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
-        this.categoryRepository = categoryRepository;
-        this.categoryMapper = categoryMapper;
-    }
 
     @Override
     public ApiResponse addCategory(CategoryDTO categoryDTO, MultipartFile image) {
@@ -77,6 +75,12 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = getCategoryById(categoryId);
         CategoryResponseDTO categoryDTO = categoryMapper.toCategoryDTO(category);
         return new ApiResponse(true, "success", HttpStatus.OK, categoryDTO);
+    }
+    @Override
+    public CategoryResponseDTO getCategoryByID(Long categoryId) {
+        Category category = getCategoryById(categoryId);
+        CategoryResponseDTO categoryDTO = categoryMapper.toCategoryDTO(category);
+        return categoryDTO;
     }
 
     @Override
@@ -127,7 +131,7 @@ public class CategoryServiceImpl implements CategoryService {
         return new ApiResponse(true, "success", HttpStatus.OK, categoryDTOList);
     }
 
-    private Category getCategoryById(Long categoryId) {
+    public Category getCategoryById(Long categoryId) {
         return categoryRepository.findByIdAndDeleteFalse(categoryId).orElseThrow(
                 () -> new ResourceNotFoundException(MessageKey.CATEGORY_NOT_FOUND));
     }

@@ -1,5 +1,8 @@
 package uz.ilmnajot.post_article.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.ilmnajot.post_article.entity.Topic;
@@ -44,11 +47,18 @@ public class TopicServiceImpl implements TopicService {
         return new ApiResponse(true, "success", HttpStatus.OK, topicDTO);
     }
 
+
+    @Override
+    public TopicResponseDTO getTopicByID(Long topicId) {
+        Topic topicById = getTopicById(topicId);
+        TopicResponseDTO topicDTO = topicMapper.toTopicDTO(topicById);
+        return topicDTO;
+    }
+
     @Override
     public List<TopicResponseDTO> getAllTopics() {
         List<Topic> all = topicRepository.findAll();
-        List<TopicResponseDTO> topicRequestDTOList = all.stream().map(topicMapper::toTopicDTO).toList();
-        return topicRequestDTOList;
+        return all.stream().map(topicMapper::toTopicDTO).toList();
     }
 
     @Override
@@ -69,9 +79,9 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public ApiResponse getTopicsByCategoryId(Long categoryId) {
+    public List<TopicResponseDTO> getTopicsByCategoryId(Long categoryId) {
         List<Topic> topicList = topicRepository.findAllByCategory_Id(categoryId);
-        return new ApiResponse(true, "success", HttpStatus.OK, topicList);
+        return topicList.stream().map(topicMapper::toTopicDTO).toList();
     }
 
     private Topic getTopicById(Long topicId) {

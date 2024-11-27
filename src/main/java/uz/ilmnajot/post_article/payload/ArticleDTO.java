@@ -23,7 +23,7 @@ public class ArticleDTO {
 //        private Long authorId;
 
 //        @NotNull(message = "Category ID cannot be null")
-        private Long categoryId;
+        private Long topicId;
 
 
 }

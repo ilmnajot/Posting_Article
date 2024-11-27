@@ -11,11 +11,13 @@ public interface TopicService {
 
     ApiResponse getTopic(Long topicId);
 
+    TopicResponseDTO getTopicByID(Long topicId);
+
     List<TopicResponseDTO> getAllTopics();
 
     ApiResponse deleteTopic(Long topicId);
 
     ApiResponse updateTopic(Long topicId, TopicRequestDTO topicRequestDTO);
 
-    ApiResponse getTopicsByCategoryId(Long categoryId);
+    List<TopicResponseDTO> getTopicsByCategoryId(Long categoryId);
 }

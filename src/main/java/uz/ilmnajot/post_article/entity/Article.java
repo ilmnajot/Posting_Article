@@ -23,9 +23,9 @@ public class Article extends AbstractEntity {
 //    @JoinColumn(name = "user_id", nullable = false)
 //    private User author;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+//    @ManyToOne
+//    @JoinColumn(name = "category_id", nullable = false)
+//    private Category category;
 
     @ManyToOne
     @JoinColumn(name = "topic_id", nullable = false)

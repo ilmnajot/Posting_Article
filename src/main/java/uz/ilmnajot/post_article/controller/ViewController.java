@@ -1,13 +1,19 @@
 package uz.ilmnajot.post_article.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import uz.ilmnajot.post_article.entity.Article;
+import uz.ilmnajot.post_article.entity.Topic;
+import uz.ilmnajot.post_article.exception.AlreadyExistsException;
 import uz.ilmnajot.post_article.payload.*;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
+import uz.ilmnajot.post_article.repository.CategoryRepository;
 import uz.ilmnajot.post_article.service.TopicService;
 import uz.ilmnajot.post_article.service.auth.AuthService;
 import uz.ilmnajot.post_article.service.interfaces.ArticleService;
@@ -23,12 +29,14 @@ public class ViewController {
     private final CategoryService categoryService;
     private final ArticleService articleService;
     private final TopicService topicService;
+    private final CategoryRepository categoryRepository;
 
-    public ViewController(AuthService authService, CategoryService categoryService, ArticleService articleService, TopicService topicService) {
+    public ViewController(AuthService authService, CategoryService categoryService, ArticleService articleService, TopicService topicService, CategoryRepository categoryRepository) {
         this.authService = authService;
         this.categoryService = categoryService;
         this.articleService = articleService;
         this.topicService = topicService;
+        this.categoryRepository = categoryRepository;
     }
 
     @GetMapping("/home")
@@ -120,44 +128,54 @@ public class ViewController {
     //************************TOPIC********************//
 
     //    @PreAuthorize("hasAnyAuthority('ADMIN', 'AUTHOR')")
-    @GetMapping("/addTopic")
-    public String showTopicPage(Model model) {
+    @GetMapping("/add-topic")
+    public String showAddTopicPage(Model model) {
+        List<CategoryResponseDTO> categories = categoryService.getAllExistsCategories();
         model.addAttribute("topic", new TopicRequestDTO());
-        return "category";
+        model.addAttribute("categories", categories);
+        return "add-topic";
     }
 
     //    @PreAuthorize("hasAnyAuthority('ADMIN', 'AUTHOR')")
-    @PostMapping("/addTopic")
+    @PostMapping("/add-topic")
     public String addTopic(@ModelAttribute("topic") @Valid TopicRequestDTO topicRequestDTO,
-                              BindingResult result,
-                              Model model) {
+                           BindingResult result,
+                           Model model) {
         if (result.hasErrors()) {
-            return "topic"; // Show errors on the same form
+            model.addAttribute("topics", topicService.getAllTopics()); // Include existing topics if needed
+            return "add-topic"; // Show validation errors on the same form
         }
         try {
-            ApiResponse topic = topicService.addTopic(topicRequestDTO);
+            topicService.addTopic(topicRequestDTO);
             model.addAttribute("success", "Topic added successfully!");
-            model.addAttribute("topic", topic); // Clear the form
+            return "redirect:/topic-list"; // Redirect to avoid duplicate submissions
+        } catch (AlreadyExistsException e) {
+            model.addAttribute("error", "Topic with this title already exists.");
         } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
+            model.addAttribute("error", "An unexpected error occurred. Please try again later.");
         }
-        return "redirect:/topic-list?success";
+        model.addAttribute("topics", topicService.getAllTopics()); // Reload topics list in case of errors
+        return "add-topic"; // Return to the same form with error messages
     }
+
 
     @GetMapping("/topic-list")
-    public String getTopics(Model model) {
-        List<TopicResponseDTO> allTopics = topicService.getAllTopics();
-        model.addAttribute("topics", allTopics);
+    public String listTopics(Model model) {
+        List<TopicResponseDTO> topics = topicService.getAllTopics();
+        if (topics == null || topics.isEmpty()) {
+            model.addAttribute("message", "No topics found.");
+        }
+        model.addAttribute("topics", topics);
         return "topic-list";
     }
-
 
 
     //************************ARTICLE********************//
     @GetMapping("/addArticle")
     public String showAddArticlePage(Model model) {
+        List<TopicResponseDTO> allTopics = topicService.getAllTopics();
         model.addAttribute("article", new ArticleDTO());
-        model.addAttribute("categories", categoryService.getAllExistsCategories());
+        model.addAttribute("topics", allTopics);
         return "add-article";
     }
 
@@ -166,7 +184,7 @@ public class ViewController {
                              BindingResult result,
                              Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("categories", categoryService.getAllExistsCategories());
+            model.addAttribute("topics", topicService.getAllTopics());
             return "add-article";
         }
         try {
@@ -176,9 +194,32 @@ public class ViewController {
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
-        model.addAttribute("categories", categoryService.getAllExistsCategories());
-        return "category-list";
+        model.addAttribute("topics", topicService.getAllTopics());
+        return "topic-list";
     }
+
+    @GetMapping("/categories/{categoryId}/topics")
+    public String getTopicsByCategoryId(@PathVariable(name = "categoryId") Long categoryId, Model model) {
+        List<TopicResponseDTO> responseDTOList = topicService.getTopicsByCategoryId(categoryId);
+        model.addAttribute("topics", responseDTOList);
+        return "topic-list";
+    }
+
+    @GetMapping("/categories/{categoryId}/articles")
+    public String viewTopicsByCategory(@PathVariable Long categoryId, Model model) {
+        CategoryResponseDTO category = categoryService.getCategoryByID(categoryId);
+        model.addAttribute("categoryName", category.getName());
+        model.addAttribute("topics", topicService.getTopicsByCategoryId(categoryId));
+        return "topic-list"; // Points to topics.html
+    }
+
+    @GetMapping("/topics/{topicId}/article")
+    public String viewArticle(@PathVariable Long topicId, Model model) {
+        TopicResponseDTO topic = topicService.getTopicByID(topicId);
+        model.addAttribute("topic", topic);
+        return "article-detail";
+    }
+
 
 
 

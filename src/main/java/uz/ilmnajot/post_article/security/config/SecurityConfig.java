@@ -58,7 +58,18 @@ public class SecurityConfig {
                                 "/addCategory",
                                 "/addArticle",
                                 "/category-list",
-                                "/images/**")
+                                "/images/**",
+                                "/api/topics/**",
+                                "/add-topic/**",
+                                "/addTopic",
+                                "/topic-list/**",
+                                "/category-list",
+                                "/topics/**",
+                                "/api/categories/**",
+                                "/categories/**",
+                                "/api/articles/",
+                                "/articles/**",
+                                "/topics/topicId/article")
                         .permitAll()
                         .anyRequest()
                         .authenticated())

@@ -5,8 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.ilmnajot.post_article.payload.TopicRequestDTO;
+import uz.ilmnajot.post_article.payload.TopicResponseDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.service.TopicService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/topics")
@@ -19,25 +22,25 @@ public class TopicController {
     }
 
 
-//    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHOR')")
+    //    @PreAuthorize("hasAnyAuthority('ADMIN','AUTHOR')")
     @PostMapping("/addTopic")
     public HttpEntity<ApiResponse> addTopic(@RequestBody TopicRequestDTO topicRequestDTO) {
         ApiResponse apiResponse = topicService.addTopic(topicRequestDTO);
         return ResponseEntity.ok(apiResponse);
     }
 
-//    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    //    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/getTopic/{topicId}")
     public HttpEntity<ApiResponse> getCategory(@PathVariable("topicId") Long topicId) {
         ApiResponse category = topicService.getTopic(topicId);
         return ResponseEntity.ok(category);
     }
 
-//    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    //    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/getAllTopics")
-    public HttpEntity<ApiResponse> getAllTopics() {
-        ApiResponse allCategories = topicService.getAllTopics();
-        return ResponseEntity.ok(allCategories);
+    public HttpEntity<?> getAllTopics() {
+        List<TopicResponseDTO> allTopics = topicService.getAllTopics();
+        return ResponseEntity.ok(allTopics);
     }
 //
 //    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
@@ -54,14 +57,14 @@ public class TopicController {
 //        return ResponseEntity.ok(allExistsCategories);
 //    }
 
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    //    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/deleteTopic/{topicId}")
     public HttpEntity<ApiResponse> deleteTopic(@PathVariable("topicId") Long topicId) {
         ApiResponse apiResponse = topicService.deleteTopic(topicId);
         return ResponseEntity.ok(apiResponse);
     }
 
-//    @PreAuthorize("hasAuthority('ADMIN')")
+    //    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/updateTopic/{topicId}")
     public HttpEntity<ApiResponse> updateTopic(@PathVariable("topicId") Long topicId, @RequestBody TopicRequestDTO topicRequestDTO) {
         ApiResponse apiResponse = topicService.updateTopic(topicId, topicRequestDTO);
@@ -69,8 +72,9 @@ public class TopicController {
     }
 
     @GetMapping("/getTopicsByCategoryId/{categoryId}")
-    public HttpEntity<ApiResponse> getAllTopicsByCategory(@PathVariable("categoryId")Long categoryId) {
-        topicService.getTopicsByCategoryId(categoryId);
+    public HttpEntity<List<TopicResponseDTO>> getAllTopicsByCategory(@PathVariable("categoryId") Long categoryId) {
+        List<TopicResponseDTO> responseDTOList = topicService.getTopicsByCategoryId(categoryId);
+        return ResponseEntity.ok(responseDTOList);
 
     }
 }

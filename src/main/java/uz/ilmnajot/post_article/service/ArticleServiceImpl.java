@@ -46,6 +46,13 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public ArticleResponseDTO getArticleById(Long articleId) {
+        Article article = articleRepository.findByIdAndDeleteFalse(articleId).orElseThrow(
+                () -> new ResourceNotFoundException("Article not found"));
+        return articleMapper.toArticleDTO(article);
+    }
+
+    @Override
     public ApiResponse getAllArticles() {
         List<Article> articleList = articleRepository.findAll();
         List<ArticleResponseDTO> articleDTOList = new ArrayList<>();
@@ -95,9 +102,20 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ApiResponse getArticlesByTopicId(Long topicId) {
+    public List<ArticleResponseDTO> getArticlesByTopicId(Long topicId) {
         List<Article> allByTopicId = articleRepository.findAllByTopic_Id(topicId);
-        return new ApiResponse(true, "success", HttpStatus.OK, allByTopicId);
+        return allByTopicId.stream().map(articleMapper::toArticleDTO).toList();
+    }
+
+    @Override
+    public ArticleDTO addArticleToTopic(Long topicId, ArticleDTO articleRequestDTO) {
+        return null;
+    }
+
+    @Override
+    public ArticleResponseDTO getArticleByTopicId(Long topicId) {
+        Article article = articleRepository.findByTopicId(topicId).orElseThrow(() -> new ResourceNotFoundException("No Article found"));
+        return articleMapper.toArticleDTO(article);
     }
 
 }

@@ -103,7 +103,7 @@
         <p th:text="${success}"></p>
     </div>
 
-    <form th:action="@{/addTopic}" method="post" th:object="${topic}">
+    <form th:action="@{/add-topic}" method="post" th:object="${topic}">
         <!-- Article Title -->
         <div class="form-field">
             <label for="title">Title:</label>
@@ -129,12 +129,13 @@
                 <option value="" disabled selected>Select Category</option>
                 <option th:each="category : ${categories}"
                         th:value="${category.id}"
-                        th:text="${category.title}"></option>
+                        th:text="${category.name}"></option>
             </select>
             <div th:if="${#fields.hasErrors('categoryId')}" class="alert error">
                 <p th:each="err : ${#fields.errors('categoryId')}" th:text="${err}"></p>
             </div>
         </div>
+
 
         <!-- Submit Button -->
         <button type="submit" class="btn">Add Article</button>

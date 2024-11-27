@@ -5,8 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.ilmnajot.post_article.payload.ArticleDTO;
+import uz.ilmnajot.post_article.payload.ArticleResponseDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.service.interfaces.ArticleService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/articles")
@@ -67,8 +70,14 @@ public class ArticleController {
     }
 
     @GetMapping("/getArticlesByTopicId/{topicId}")
-    public HttpEntity<ApiResponse> getArticlesByTopicId(@PathVariable(name = "topicId") Long topicId) {
-        articleService.getArticlesByTopicId(topicId);
+    public HttpEntity<?> getArticlesByTopicId(@PathVariable(name = "topicId") Long topicId) {
+        List<ArticleResponseDTO> articles = articleService.getArticlesByTopicId(topicId);
+        return ResponseEntity.ok(articles);
+    }
+    @GetMapping("/getArticle/{topicId}")
+    public HttpEntity<?> getArticleById(@PathVariable(name = "topicId") Long topicId){
+        ArticleResponseDTO responseDTO = articleService.getArticleByTopicId(topicId);
+        return ResponseEntity.ok(responseDTO);
     }
 
 }

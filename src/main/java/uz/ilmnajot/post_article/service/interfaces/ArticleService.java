@@ -1,12 +1,16 @@
 package uz.ilmnajot.post_article.service.interfaces;
 
 import uz.ilmnajot.post_article.payload.ArticleDTO;
+import uz.ilmnajot.post_article.payload.ArticleResponseDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
+
+import java.util.List;
 
 public interface ArticleService {
     ApiResponse addArticle(ArticleDTO articleDTO);
 
     ApiResponse getArticle(Long articleId);
+    ArticleResponseDTO getArticleById(Long articleId);
 
     ApiResponse getAllArticles();
 
@@ -18,5 +22,9 @@ public interface ArticleService {
 
     ApiResponse updateArticle(Long articleId, ArticleDTO articleDTO);
 
-    ApiResponse getArticlesByTopicId(Long topicId);
+    List<ArticleResponseDTO> getArticlesByTopicId(Long topicId);
+
+    ArticleDTO addArticleToTopic(Long topicId, ArticleDTO articleRequestDTO);
+
+    ArticleResponseDTO getArticleByTopicId(Long topicId);
 }

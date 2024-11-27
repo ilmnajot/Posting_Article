@@ -12,6 +12,8 @@ public interface CategoryService {
 
     ApiResponse getCategory(Long categoryId);
 
+    CategoryResponseDTO getCategoryByID(Long categoryId);
+
     ApiResponse getAllCategories();
 
     List<CategoryResponseDTO> getAllExistsCategories();
