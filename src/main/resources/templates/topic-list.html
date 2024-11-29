@@ -59,7 +59,7 @@
 <h1 th:text="'Topics in ' + ${categoryName}">Topics in Category</h1>
 <div class="topic-container">
     <!-- Loop through topics -->
-    <a class="topic-card" th:each="topic : ${topics}" th:href="@{/topics/{id}/article(id=${topic.id})}">
+    <a class="topic-card" th:each="topic : ${topics}" th:href="@{/topics/{topicId}/articles(topicId=${topic.id})}">
         <h2 th:text="${topic.title}">Topic Title</h2>
         <p th:text="${topic.description}">Topic Description</p>
     </a>

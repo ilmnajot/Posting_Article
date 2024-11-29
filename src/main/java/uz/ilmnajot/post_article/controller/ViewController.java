@@ -1,8 +1,7 @@
 package uz.ilmnajot.post_article.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,16 +10,19 @@ import org.springframework.web.multipart.MultipartFile;
 import uz.ilmnajot.post_article.entity.Article;
 import uz.ilmnajot.post_article.entity.Topic;
 import uz.ilmnajot.post_article.exception.AlreadyExistsException;
+import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
 import uz.ilmnajot.post_article.payload.*;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
-import uz.ilmnajot.post_article.repository.CategoryRepository;
-import uz.ilmnajot.post_article.service.TopicService;
+import uz.ilmnajot.post_article.repository.ArticleRepository;
+import uz.ilmnajot.post_article.repository.TopicRepository;
+import uz.ilmnajot.post_article.service.interfaces.TopicService;
 import uz.ilmnajot.post_article.service.auth.AuthService;
 import uz.ilmnajot.post_article.service.interfaces.ArticleService;
 import uz.ilmnajot.post_article.service.interfaces.CategoryService;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RequestMapping("/")
 @Controller
 public class ViewController {
@@ -29,15 +31,9 @@ public class ViewController {
     private final CategoryService categoryService;
     private final ArticleService articleService;
     private final TopicService topicService;
-    private final CategoryRepository categoryRepository;
+    private final ArticleRepository articleRepository;
+    private final TopicRepository topicRepository;
 
-    public ViewController(AuthService authService, CategoryService categoryService, ArticleService articleService, TopicService topicService, CategoryRepository categoryRepository) {
-        this.authService = authService;
-        this.categoryService = categoryService;
-        this.articleService = articleService;
-        this.topicService = topicService;
-        this.categoryRepository = categoryRepository;
-    }
 
     @GetMapping("/home")
     public String showHomePage() {
@@ -195,7 +191,14 @@ public class ViewController {
             model.addAttribute("error", e.getMessage());
         }
         model.addAttribute("topics", topicService.getAllTopics());
-        return "topic-list";
+        return "articles";
+    }
+
+    @GetMapping("/articles")
+    public String getAllArticles(Model model) {
+        ApiResponse articles = articleService.getAllArticles();// Replace with actual service/repository call
+        model.addAttribute("articles", articles);
+        return "articles"; // Ensure you have articles.html in the templates folder
     }
 
     @GetMapping("/categories/{categoryId}/topics")
@@ -213,14 +216,30 @@ public class ViewController {
         return "topic-list"; // Points to topics.html
     }
 
-    @GetMapping("/topics/{topicId}/article")
+
+    ///****************************///////////////////
+
+    @GetMapping("/topics/{topicId}/articles")
     public String viewArticle(@PathVariable Long topicId, Model model) {
         TopicResponseDTO topic = topicService.getTopicByID(topicId);
+        List<ArticleResponseDTO> articles = articleService.getArticlesByTopicId(topicId);
         model.addAttribute("topic", topic);
+        model.addAttribute("articles", articles);
+        return "articles";
+    }
+
+    @GetMapping("/topics/{topicId}/articles/{articleId}")
+    public String getArticleDetails(@PathVariable Long topicId, @PathVariable Long articleId, Model model) {
+        ArticleResponseDTO article = articleService(topicId, articleId); // Replace with service or repo call
+        model.addAttribute("article", article);
         return "article-detail";
     }
 
-
+    private ArticleResponseDTO articleService(Long topicId, Long articleId) {
+        Article article = articleRepository.findByIdAndDeleteFalse(articleId).orElseThrow(() -> new ResourceNotFoundException("article not found"));
+        Topic topic = topicRepository.findByIdAndDeleteFalse(topicId).orElseThrow(() -> new ResourceNotFoundException("topic not found"));
+        return new ArticleResponseDTO(article.getId(), "Title", "content", topic.getId());
+    }
 
 
 }

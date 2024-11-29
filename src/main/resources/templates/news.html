@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Portal</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #007bff;
+            font-size: 1.8rem;
+        }
+
+        .navbar {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .news-header {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            color: #343a40;
+        }
+
+        .news-card {
+            margin-bottom: 30px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .news-card img {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .news-card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .news-card-summary {
+            color: #6c757d;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="/news">📢 News Portal</a>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h1 class="news-header">Stay Updated with the Latest News</h1>
+    <div class="mb-3">
+        <a href="/news/add" class="btn btn-primary">Add News</a>
+    </div>
+    <div class="row">
+        <div class="col-md-4" th:each="news : ${newsList}">
+            <div class="card news-card">
+                <img class="card-img-top" th:src="${news.imageURL != null ? news.imageURL : 'https://via.placeholder.com/400x200'}" alt="News image">
+                <div class="card-body">
+                    <h5 class="card-title news-card-title" th:text="${news.title}"></h5>
+                    <p class="card-text news-card-summary" th:text="${#strings.abbreviate(news.content, 120)}"></p>
+                    <a href="/news/details/{id}" th:href="@{/news/details/{id}(id=${news.id})}" class="btn btn-primary w-100">Read More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="text-center py-3 mt-5">
+    <p>© 2024 News Portal. All rights reserved. | <a href="/about">About Us</a></p>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

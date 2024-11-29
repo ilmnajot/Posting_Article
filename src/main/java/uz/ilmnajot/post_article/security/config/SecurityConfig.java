@@ -48,20 +48,14 @@ public class SecurityConfig {
                                 "/configuration/ui",
                                 "/configuration/security",
                                 "/api/auth/**,",
-                                "/",
                                 "/login",
                                 "/sign-up",
                                 "/email-verify",
                                 "/verify-email",
                                 "/home",
                                 "/verification-success",
-                                "/addCategory",
-                                "/addArticle",
                                 "/category-list",
-                                "/images/**",
                                 "/api/topics/**",
-                                "/add-topic/**",
-                                "/addTopic",
                                 "/topic-list/**",
                                 "/category-list",
                                 "/topics/**",
@@ -69,7 +63,11 @@ public class SecurityConfig {
                                 "/categories/**",
                                 "/api/articles/",
                                 "/articles/**",
-                                "/topics/topicId/article")
+                                "/topics/topicId/articles",
+                                "/topics/topicId/articles/articleId",
+                                "/news/news-list",
+                                "/news/news",
+                                "/news/details/id")
                         .permitAll()
                         .anyRequest()
                         .authenticated())

@@ -2,12 +2,11 @@ package uz.ilmnajot.post_article.controller;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.ilmnajot.post_article.payload.TopicRequestDTO;
 import uz.ilmnajot.post_article.payload.TopicResponseDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
-import uz.ilmnajot.post_article.service.TopicService;
+import uz.ilmnajot.post_article.service.interfaces.TopicService;
 
 import java.util.List;
 

@@ -17,6 +17,7 @@ public class Article extends AbstractEntity {
 
     @Column(nullable = false, unique = true)
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String content;
 
 //    @ManyToOne

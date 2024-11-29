@@ -12,3 +12,4 @@ public interface CategoryMapper {
 
     Category toUpdateEntity(Category category,CategoryDTO categoryDTO);
 }
+

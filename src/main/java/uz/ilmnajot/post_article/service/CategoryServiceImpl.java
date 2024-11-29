@@ -1,6 +1,7 @@
 package uz.ilmnajot.post_article.service;
 
 import jakarta.validation.Valid;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -24,9 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-@RequiredArgsConstructor
+@NoArgsConstructor(force = true)
 @Service
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
@@ -34,6 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Value("${upload.dir}")
     private String imageDirectory;
+
 
 
     @Override

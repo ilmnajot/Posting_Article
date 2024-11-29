@@ -82,12 +82,16 @@
 <body>
 <header th:text="'Articles in ' + ${topic.title}">Articles</header>
 <div class="container">
-    <a th:href="@{/categories/{categoryId}/topics(categoryId=${topic.category.id})}" class="back-link">← Back to Topics</a>
+    <a th:href="@{/topics/{topicId}/articles/{articleId}(topicId=${topic.id})} " class="read-more">Read More</a> <!, , articleId=${article.id}!>
     <div class="articles-grid">
         <div class="article-card" th:each="article : ${articles}">
             <div class="article-content">
                 <h3 class="article-title" th:text="${article.title}">Article Title</h3>
-                <p class="article-summary" th:text="${article.content.substring(0, 150) + '...'}">Article summary...</p>
+                <p class="article-summary"
+                   th:text="${article.content != null ? (#strings.length(article.content) > 5 ? article.content.substring(0, 150) + '...' : article.content) : 'No content available'}">
+                    Article summary...
+                </p>
+
                 <a th:href="@{/topics/{topicId}/articles/{articleId}(topicId=${topic.id}, articleId=${article.id})}"
                    class="read-more">Read More</a>
             </div>

@@ -51,7 +51,7 @@ public class ArticleMapperImpl implements ArticleMapper {
         articleDTO.setTitle(article.getTitle());
         articleDTO.setContent(article.getContent());
 //        articleDTO.setAuthorId(article.getAuthor().getId());
-        articleDTO.setCategoryId(article.getTopic().getId());
+        articleDTO.setTopicId(article.getTopic().getId());
         return articleDTO;
     }
 

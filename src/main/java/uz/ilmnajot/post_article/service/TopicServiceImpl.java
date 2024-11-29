@@ -1,18 +1,19 @@
 package uz.ilmnajot.post_article.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.ilmnajot.post_article.entity.Topic;
 import uz.ilmnajot.post_article.exception.AlreadyExistsException;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
+import uz.ilmnajot.post_article.mapper.ArticleMapper;
 import uz.ilmnajot.post_article.mapper.TopicMapper;
+import uz.ilmnajot.post_article.payload.ArticleResponseDTO;
 import uz.ilmnajot.post_article.payload.TopicRequestDTO;
 import uz.ilmnajot.post_article.payload.TopicResponseDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
+import uz.ilmnajot.post_article.repository.ArticleRepository;
 import uz.ilmnajot.post_article.repository.TopicRepository;
+import uz.ilmnajot.post_article.service.interfaces.TopicService;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,10 +23,14 @@ public class TopicServiceImpl implements TopicService {
 
     private final TopicRepository topicRepository;
     private final TopicMapper topicMapper;
+    private final ArticleMapper articleMapper;
+    private final ArticleRepository articleRepository;
 
-    public TopicServiceImpl(TopicRepository topicRepository, TopicMapper topicMapper) {
+    public TopicServiceImpl(TopicRepository topicRepository, TopicMapper topicMapper, ArticleMapper articleMapper, ArticleRepository articleRepository) {
         this.topicRepository = topicRepository;
         this.topicMapper = topicMapper;
+        this.articleMapper = articleMapper;
+        this.articleRepository = articleRepository;
     }
 
     @Override
@@ -82,6 +87,14 @@ public class TopicServiceImpl implements TopicService {
     public List<TopicResponseDTO> getTopicsByCategoryId(Long categoryId) {
         List<Topic> topicList = topicRepository.findAllByCategory_Id(categoryId);
         return topicList.stream().map(topicMapper::toTopicDTO).toList();
+    }
+
+    @Override
+    public List<ArticleResponseDTO> getArticlesByTopicId(Long topicId) {
+        return articleRepository
+                .findAllByTopic_Id(topicId)
+                .stream().map(articleMapper::toArticleDTO)
+                .toList();
     }
 
     private Topic getTopicById(Long topicId) {
