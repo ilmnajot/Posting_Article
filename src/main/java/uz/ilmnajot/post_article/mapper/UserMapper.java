@@ -6,7 +6,8 @@ import uz.ilmnajot.post_article.payload.UserResponseDTO;
 
 public interface UserMapper {
 
-   User toUserEntity(UserDTO userDTO);
-    public UserResponseDTO toUserResponseDTO(User user);
+    User toUserEntity(UserDTO userDTO);
+
+    UserResponseDTO toUserResponseDTO(User user);
 
 }

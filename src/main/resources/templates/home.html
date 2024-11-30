@@ -15,10 +15,10 @@
         body {
             font-family: 'Arial', sans-serif;
             color: #333;
-            background: url('@{/home.jpg}') no-repeat center right;
             background-size: auto 60%; /* Adjusts height to 50% of the viewport */
-            background-position:right; /* Positions the image at the top-right corner */
-            background-attachment: fixed; /* Keeps the image fixed during scrolling (optional) */
+            /* Positions the image at the top-right corner */
+            /* Keeps the image fixed during scrolling (optional) */
+            background: url("/images/home.jpg") no-repeat fixed right;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -197,10 +197,8 @@
         <a href="/aboutus">About Us</a>
         <a href="/contactus">Contact Us</a>
         <a href="/news">News</a>
+        <a href="/addCategory">Add Category</a>
 
-<!--        <a href="/addCategory">Add Category</a>-->
-<!--        <a href="/addArticle">Add Article</a>-->
-<!--        <a href="/form">Play GreenCard</a>-->
     </nav>
 </header>
 
@@ -209,7 +207,7 @@
     <h1>Welcome to ilmNajot</h1>
     <p>Your journey to knowledge begins here. Explore courses, connect, and grow.</p>
     <div class="btn-group">
-        <a href="/register" class="btn register-btn">Register</a>
+        <a href="/sign-up" class="btn register-btn">Register</a>
         <a href="/login" class="btn">Login</a>
     </div>
 </section>

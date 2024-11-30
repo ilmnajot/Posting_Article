@@ -36,41 +36,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authRequest -> authRequest
-                        .requestMatchers(
-                                "/v2/api-docs",
-                                "/v3/api-docs",
-                                "/v3/api-docs/**",
-                                "/swagger-resources",
-                                "/swagger-resources/**",
-                                "/swagger-ui/**",
-                                "/webjars/**",
-                                "/swagger-ui.html",
-                                "/configuration/ui",
-                                "/configuration/security",
-                                "/api/auth/**,",
-                                "/login",
-                                "/sign-up",
-                                "/email-verify",
-                                "/verify-email",
-                                "/home",
-                                "/verification-success",
-                                "/category-list",
-                                "/api/topics/**",
-                                "/topic-list/**",
-                                "/category-list",
-                                "/topics/**",
-                                "/api/categories/**",
-                                "/categories/**",
-                                "/api/articles/",
-                                "/articles/**",
-                                "/topics/topicId/articles",
-                                "/topics/topicId/articles/articleId",
-                                "/news/news-list",
-                                "/news/news",
-                                "/news/details/id")
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
+//                        .requestMatchers(getWhitelist())
+//                        .permitAll()
+//                        .requestMatchers(getCustomWhitelist())
+//                        .permitAll()
+                        .anyRequest().permitAll()
+//                        .authenticated()
+                )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -82,21 +54,61 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/home")
                         .failureHandler(new CustomAuthenticationFailureHandler())
-                        .failureUrl("/login?error=true") //redirect to the login page
+                        .failureUrl("/login?error=true") //redirect to the home page
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessHandler(((request, response, authentication) ->{
-                            response.setStatus(HttpServletResponse.SC_OK);
-                            response.sendRedirect("/login?logout");
-                        }))// Add logout URL
+                                .logoutUrl("/logout")
+                                .logoutSuccessHandler(((request, response, authentication) -> {
+                                    response.setStatus(HttpServletResponse.SC_OK);
+                                    response.sendRedirect("/home?logout");
+                                }))// Add logout URL
 //                        .logoutSuccessUrl("/login?logout")  // Redirect to login after logout
-                        .invalidateHttpSession(true)  // Invalidate the session
-                        .clearAuthentication(true)  // Clear authentication
-                        .permitAll()
+                                .invalidateHttpSession(true)  // Invalidate the session
+                                .clearAuthentication(true)  // Clear authentication
+                                .permitAll()
                 );
         return http.build();
+    }
+
+    private String[] getWhitelist() {
+        return new String[]{
+                "/v2/api-docs",
+                "/v3/api-docs",
+                "/v3/api-docs/**",
+                "/swagger-resources",
+                "/swagger-resources/**",
+                "/swagger-ui/**",
+                "/webjars/**",
+                "/swagger-ui.html",
+                "/configuration/ui",
+                "/configuration/security"
+        };
+    }
+
+    private String [] getCustomWhitelist(){
+        return new String[]{
+                "/api/auth/**,",
+                "/login",
+                "/sign-up",
+                "/email-verify",
+                "/verify-email",
+                "/home",
+                "/verification-success",
+                "/category-list",
+                "/topics/**",
+                "/topic-list/**",
+                "/category-list",
+                "/categories/**",
+                "/articles/**",
+                "/topics/topicId/articles",
+                "/topics/topicId/articles/articleId",
+                "/news-list",
+                "/news",
+                "/details/id",
+                "/aboutus",
+
+        };
     }
 
 }

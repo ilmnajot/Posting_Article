@@ -1,6 +1,5 @@
-package uz.ilmnajot.post_article.controller;
+package uz.ilmnajot.post_article.controller.view;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -15,34 +14,34 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/news")
+@RequestMapping("/")
 public class ViewNewsController {
 
     private final NewsService newsService;
 
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-    @GetMapping("/details/{id}")
+//    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    @GetMapping("/news/details/{id}")
     public String viewNewsDetails(@PathVariable Long id, Model model) {
         NewsDTO news = newsService.getNews(id);
         model.addAttribute("news", news);
         return "details";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/add-news")
+//    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/news/add-news")
     public String showAddNews(Model model) {
         model.addAttribute("news", new NewsDTO());
         return "add-news";
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/add-news")
+//    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/news/add-news")
     public String addNews(@ModelAttribute("news") NewsDTO newsDTO,
                           @RequestParam("image") MultipartFile image,
                           BindingResult result,
                           Model model) {
         if (result.hasErrors()) {
-            return "/news/add-news"; // Show errors on the same form
+            return "/add-news"; // Show errors on the same form
         }
         try {
             newsService.createNews(newsDTO, image);
@@ -51,10 +50,10 @@ public class ViewNewsController {
         } catch (Exception e) {
             model.addAttribute("error", e.getMessage());
         }
-        return "redirect:/news/news-list?success";
+        return "redirect:/news-list?success";
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+//    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @GetMapping("/news-list")
     public String viewNewsList(Model model) {
         List<NewsDTO> news = newsService.getAllNewsList();
@@ -63,8 +62,8 @@ public class ViewNewsController {
     }
 
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    @GetMapping
+//    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @GetMapping("/news")
     public String showNewsPage(Model model) {
         List<NewsDTO> news = newsService.getAllNewsList();
         model.addAttribute("newsList", news);

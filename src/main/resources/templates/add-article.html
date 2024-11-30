@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Article</title>
@@ -118,7 +119,7 @@
         <p th:text="${success}"></p>
     </div>
 
-    <form th:action="@{/addArticle}" method="post" th:object="${article}">
+    <form th:action="@{/add-article}" method="post" th:object="${article}">
         <!-- Article Title -->
         <div class="form-field">
             <label for="title">Title:</label>

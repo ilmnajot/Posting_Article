@@ -1,8 +1,5 @@
 package uz.ilmnajot.post_article.service;
-
-import jakarta.validation.Valid;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,7 +14,6 @@ import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.repository.CategoryRepository;
 import uz.ilmnajot.post_article.service.interfaces.CategoryService;
 import uz.ilmnajot.post_article.utils.MessageKey;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -25,13 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-@NoArgsConstructor(force = true)
+
 @Service
-@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
-    private final CategoryRepository categoryRepository;
-    private final CategoryMapper categoryMapper;
+    @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
+    private  CategoryMapper categoryMapper;
 
     @Value("${upload.dir}")
     private String imageDirectory;
