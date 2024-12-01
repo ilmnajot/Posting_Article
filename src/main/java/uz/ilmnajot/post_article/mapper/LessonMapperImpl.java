@@ -3,7 +3,9 @@ package uz.ilmnajot.post_article.mapper;
 import org.springframework.stereotype.Component;
 import uz.ilmnajot.post_article.entity.Course;
 import uz.ilmnajot.post_article.entity.Lesson;
+import uz.ilmnajot.post_article.entity.Module;
 import uz.ilmnajot.post_article.payload.LessonDTO;
+import uz.ilmnajot.post_article.payload.LessonResponseDTO;
 import uz.ilmnajot.post_article.repository.CourseRepository;
 
 @Component
@@ -15,7 +17,7 @@ public class LessonMapperImpl implements LessonMapper {
         this.courseRepository = courseRepository;
     }
 
-    public Lesson toLessonEntity(Course course, String name, String description, Integer duration, String videoURL) {
+    public Lesson toLessonEntity(Module module, String name, String description, Integer duration, String videoURL) {
 
         return Lesson
                 .builder()
@@ -24,18 +26,17 @@ public class LessonMapperImpl implements LessonMapper {
 //                .orderIndex(lessonDTO.getOrderIndex())
                 .videoURL(videoURL)
                 .duration(duration)
-                .course(course)
+                .module(module)
                 .build();
     }
 
-    public LessonDTO toLessonDTO(Lesson lesson) {
-        return LessonDTO
+    public LessonResponseDTO toLessonDTO(Lesson lesson) {
+        return LessonResponseDTO
                 .builder()
-//                .id(lesson.getId())
+                .id(lesson.getId())
                 .name(lesson.getName())
                 .description(lesson.getDescription())
-//                .orderIndex(lesson.getOrderIndex())
-//                .videoURL(lesson.getVideoURL())
+                .videoURL(lesson.getVideoURL())
                 .duration(lesson.getDuration())
                 .build();
     }

@@ -14,7 +14,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     Optional<Lesson> findByIdAndDeleteFalse(Long lessonId);
 
-    List<Lesson> findByCourse_IdOrderByOrderIndex(Long courseId);
+    List<Lesson> findByModule_IdOrderByOrderIndex(Long moduleId);
 
     @Query("select lsn from lesson as lsn where lsn.name like %:keyword%")
     List<Lesson> searchLessonsByName(@Param("keyword") String keyword);

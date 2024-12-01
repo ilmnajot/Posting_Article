@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Course Catalog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* General Reset */
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #222;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* Grid layout for courses */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* Course card styling */
+        .course-card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .course-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .course-card-content {
+            padding: 20px;
+        }
+
+        .course-title {
+            font-size: 1.25em;
+            font-weight: 600;
+            margin: 0 0 10px;
+            color: #007BFF;
+        }
+
+        .course-title:hover {
+            text-decoration: underline;
+        }
+
+        .course-description {
+            font-size: 0.95em;
+            color: #555;
+            margin-bottom: 15px;
+            height: 48px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .course-price {
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .course-price.free {
+            color: #ff6b6b;
+        }
+
+        .mentor-info {
+            font-size: 0.85em;
+            color: #888;
+        }
+
+        /* Button styling */
+        .view-details-btn {
+            display: block;
+            margin-top: 15px;
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.95em;
+            transition: background-color 0.3s ease;
+        }
+
+        .view-details-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #aaa;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Explore Our Courses</h1>
+    <div class="course-grid">
+        <!-- Loop through the courses -->
+        <div class="course-card" th:each="course : ${courses}">
+            <img src="/images/course-placeholder.jpg" alt="Course Image" th:src="${course.imageUrl != null ? course.imageUrl : '/images/course-placeholder.jpg'}">
+            <div class="course-card-content">
+                <a class="course-title" th:href="@{'/courses/' + ${course.id}}" th:text="${course.title}">Course Title</a>
+                <p class="course-description" th:text="${course.description}">This is a brief description of the course.</p>
+                <p class="course-price" th:classappend="${course.free} ? 'free' : ''">
+                    <span th:if="${course.free}">Free</span>
+                    <span th:unless="${course.free}" th:text="'$' + ${course.price}">Price</span>
+                </p>
+                <p class="mentor-info">
+                    Mentor: <span th:text="${course.mentorId}">Mentor Name</span>
+                </p>
+                <a class="view-details-btn" th:href="@{'/courses/' + ${course.id}}">View Details</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    &copy; 2024 Your Company. All rights reserved.
+</div>
+</body>
+</html>

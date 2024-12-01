@@ -27,6 +27,6 @@ public class Lesson extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
-    private Course course;
+    private Module module;
 
 }

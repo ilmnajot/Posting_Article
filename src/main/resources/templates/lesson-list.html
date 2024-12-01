@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Lessons</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+        }
+
+        .course-card {
+            display: flex;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .course-card img {
+            width: 30%;
+            object-fit: cover;
+        }
+
+        .course-details {
+            padding: 20px;
+            flex: 1;
+            position: relative;
+        }
+
+        .course-details h3 {
+            margin: 0 0 10px;
+            color: #2c3e50;
+        }
+
+        .course-details p {
+            margin: 0 0 15px;
+            color: #7f8c8d;
+        }
+
+        .course-price {
+            color: #e74c3c;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .course-discounted {
+            text-decoration: line-through;
+            color: #bdc3c7;
+            margin-left: 10px;
+        }
+
+        .lesson-list {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .lesson-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .lesson-item:last-child {
+            border-bottom: none;
+        }
+
+        .lesson-title {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+        .lesson-title i {
+            font-size: 20px;
+            margin-right: 10px;
+            color: #3498db;
+        }
+
+        .progress-bar {
+            width: 100px;
+        }
+
+        .purchase-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-4">
+    <!-- Course Header -->
+    <div class="course-card">
+        <img th:src="${course.imageUrl}" alt="Course Image">
+        <div class="course-details">
+            <h3 th:text="${course.title}">Course Title</h3>
+            <p th:text="'Mentor: ' + ${course.mentorName}">Mentor Name</p>
+            <p>
+                <span class="course-price" th:text="${course.discountPrice} + ' so\'m'">240,000 so'm</span>
+                <span class="course-discounted" th:text="${course.originalPrice} + ' so\'m'">480,000 so'm</span>
+            </p>
+            <button class="btn btn-primary purchase-btn" th:if="${!course.purchased}" th:text="'Purchase'"></button>
+            <button class="btn btn-secondary purchase-btn" th:if="${course.purchased}" th:text="'Already Purchased'"></button>
+        </div>
+    </div>
+
+    <!-- Lessons List -->
+    <div class="lesson-list">
+        <h4>Lessons</h4>
+        <div class="lesson-item" th:each="lesson : ${course.lessons}">
+            <div class="lesson-title">
+                <i class="bi bi-play-circle"></i>
+                <span th:text="${lesson.title}">Lesson Title</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" th:style="'width:' + ${lesson.progress} + '%'" th:text="${lesson.progress + '%'}">0%</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
+</body>
+</html>

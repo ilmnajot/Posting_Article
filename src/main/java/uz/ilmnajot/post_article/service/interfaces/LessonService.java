@@ -5,13 +5,15 @@ import uz.ilmnajot.post_article.payload.LessonDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 
 public interface LessonService {
-    ApiResponse addLesson(Long courseId, String name, String description, Integer duration, MultipartFile video);
+    ApiResponse addLesson(Long moduleId,String name, String description, Integer duration, MultipartFile video);
 
-    ApiResponse getLessonsByCourse(Long courseId);
+    ApiResponse getModulesByCourse(Long courseId);
 
     ApiResponse updateLesson(Long lessonId, LessonDTO updatedLesson);
 
     ApiResponse deleteLesson(Long lessonId);
 
     ApiResponse searchLessons(String keyword);
+
+    ApiResponse getLessonsByModule(Long moduleId);
 }

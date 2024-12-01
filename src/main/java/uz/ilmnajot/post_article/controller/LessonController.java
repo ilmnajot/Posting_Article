@@ -1,4 +1,5 @@
 package uz.ilmnajot.post_article.controller;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -20,26 +21,33 @@ public class LessonController {
     public LessonController(LessonService lessonService) {
         this.lessonService = lessonService;
     }
+
     @Operation(summary = "Add a lesson with a video file")
     @ApiResponses(value = {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Lesson added successfully"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid input")
     })
-    @PostMapping(value = "/addLesson/{courseId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/addLesson/{moduleId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public HttpEntity<ApiResponse> addLesson(
-            @PathVariable(name = "courseId") Long courseId,
+            @PathVariable(name = "moduleId") Long moduleId,
             @RequestParam("name") String name,
             @RequestParam("description") String description,
             @RequestParam("duration") Integer duration,
             @RequestParam("video") MultipartFile video) {
-        ApiResponse apiResponse = lessonService.addLesson(courseId, name, description,duration, video);
+        ApiResponse apiResponse = lessonService.addLesson(moduleId, name, description, duration, video);
         return ResponseEntity.ok(apiResponse);
     }
 
     // Get lessons by course
     @GetMapping("/course/{courseId}")
-    public ResponseEntity<ApiResponse> getLessonsByCourse(@PathVariable Long courseId) {
-        return ResponseEntity.ok(lessonService.getLessonsByCourse(courseId));
+    public ResponseEntity<ApiResponse> getModulesByCourse(@PathVariable Long courseId) {
+        return ResponseEntity.ok(lessonService.getModulesByCourse(courseId));
+    }
+
+    @GetMapping("/module/{moduleId}")
+    public ResponseEntity<ApiResponse> getLessonsByModule(@PathVariable Long moduleId) {
+        ApiResponse lessonsByModule = lessonService.getLessonsByModule(moduleId);
+        return ResponseEntity.ok(lessonsByModule);
     }
 
 

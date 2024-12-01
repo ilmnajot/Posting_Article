@@ -54,10 +54,26 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public CourseDTO getCourseById(Long courseId) {
+        Course course = courseRepository.findByIdAndDeleteFalse(courseId).orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+        return courseMapper.toCourseDTO(course);
+    }
+
+    @Override
     public ApiResponse getCourses() {
         List<Course> courseList = courseRepository.findAll();
         List<CourseDTO> courseDTOList = courseList.stream().map(courseMapper::toCourseDTO).toList();
         return new ApiResponse(true, "success", HttpStatus.OK, courseDTOList);
+    }
+
+
+    @Override
+    public List<CourseDTO> getCoursesList() {
+        List<Course> courseList = courseRepository.findAll();
+        return courseList
+                .stream()
+                .map(courseMapper::toCourseDTO)
+                .toList();
     }
 
     @Override

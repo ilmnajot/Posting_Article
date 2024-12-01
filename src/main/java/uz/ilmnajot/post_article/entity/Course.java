@@ -37,7 +37,7 @@ public class Course extends AbstractEntity {
     private User mentor;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true) //it won't be created...
-    private List<Lesson> lessons;
+    private List<Module> modules;
 
 //    @ManyToOne
 //    private Category category;
