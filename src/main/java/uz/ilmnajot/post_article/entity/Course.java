@@ -9,6 +9,7 @@ import uz.ilmnajot.post_article.component.AbstractEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -41,5 +42,8 @@ public class Course extends AbstractEntity {
 
 //    @ManyToOne
 //    private Category category;
+
+    @ManyToMany(mappedBy = "enrolledCourses", fetch = FetchType.LAZY)
+    private Set<User> enrolledUsers;
 
 }

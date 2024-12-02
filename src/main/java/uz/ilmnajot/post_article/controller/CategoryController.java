@@ -24,7 +24,8 @@ public class CategoryController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN','AUTHOR')")
     @PostMapping("/addCategory")
-    public HttpEntity<ApiResponse> addCategory(@RequestBody CategoryDTO categoryDTO, @RequestParam("image")MultipartFile image) {
+    public HttpEntity<ApiResponse> addCategory(@RequestBody CategoryDTO categoryDTO,
+                                               @RequestParam("image") MultipartFile image) {
         ApiResponse apiResponse = categoryService.addCategory(categoryDTO,image);
         return ResponseEntity.ok(apiResponse);
     }
