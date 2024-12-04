@@ -34,6 +34,8 @@ public class Course extends AbstractEntity {
 
     private boolean free;
 
+//    private String image;
+
     @ManyToOne
     private User mentor;
 

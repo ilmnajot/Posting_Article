@@ -2,6 +2,7 @@ package uz.ilmnajot.post_article.controller;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import uz.ilmnajot.post_article.payload.CourseDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.service.interfaces.CourseService;
@@ -46,5 +47,6 @@ public class CourseController {
         ApiResponse apiResponse = courseService.deleteCourse(courseId);
         return ResponseEntity.ok(apiResponse);
     }
+
 
 }

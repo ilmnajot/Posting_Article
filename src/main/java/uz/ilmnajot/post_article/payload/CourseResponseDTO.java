@@ -5,8 +5,9 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class CourseDTO {
+public class CourseResponseDTO {
 
+    private Long id;
     private String title;
     private String description;
     @PositiveOrZero // Ensures price is non-negative

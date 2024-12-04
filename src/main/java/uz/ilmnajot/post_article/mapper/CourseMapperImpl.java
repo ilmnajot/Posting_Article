@@ -6,6 +6,7 @@ import uz.ilmnajot.post_article.entity.Course;
 import uz.ilmnajot.post_article.entity.User;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
 import uz.ilmnajot.post_article.payload.CourseDTO;
+import uz.ilmnajot.post_article.payload.CourseResponseDTO;
 import uz.ilmnajot.post_article.repository.CourseRepository;
 import uz.ilmnajot.post_article.repository.UserRepository;
 
@@ -26,17 +27,20 @@ public class CourseMapperImpl implements CourseMapper {
         course.setPrice(courseDTO.getPrice());
         course.setLessonCount(courseDTO.getLessonCount());
         course.setFree(courseDTO.isFree());
+//        course.setImage(image);
         course.setMentor(mentor);
         return course;
     }
 
-    public CourseDTO toCourseDTO(Course course) {
-        CourseDTO courseDTO = new CourseDTO();
+    public CourseResponseDTO toCourseDTO(Course course) {
+        CourseResponseDTO courseDTO = new CourseResponseDTO();
+        courseDTO.setId(course.getId());
         courseDTO.setTitle(course.getTitle());
         courseDTO.setDescription(course.getDescription());
         courseDTO.setPrice(course.getPrice());
         courseDTO.setLessonCount(course.getLessonCount());
         courseDTO.setFree(course.isFree());
+//        courseDTO.setImage(course.getImage());
         courseDTO.setMentorId(course.getMentor().getId());
         return courseDTO;
     }

@@ -1,19 +1,30 @@
 package uz.ilmnajot.post_article.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import uz.ilmnajot.post_article.entity.Course;
+import uz.ilmnajot.post_article.entity.User;
 import uz.ilmnajot.post_article.exception.AlreadyExistsException;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
 import uz.ilmnajot.post_article.mapper.CourseMapper;
+import uz.ilmnajot.post_article.mapper.UserMapper;
 import uz.ilmnajot.post_article.payload.CourseDTO;
+import uz.ilmnajot.post_article.payload.CourseResponseDTO;
+import uz.ilmnajot.post_article.payload.MentorDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.repository.CourseRepository;
+import uz.ilmnajot.post_article.repository.UserRepository;
 import uz.ilmnajot.post_article.service.interfaces.CourseService;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +32,11 @@ public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
+//    @Value("${upload.dir}")
+//    private String imageDirectory;
 
     @Override
     public ApiResponse addCourse(CourseDTO courseDTO) {
@@ -29,12 +44,34 @@ public class CourseServiceImpl implements CourseService {
         if (optionalCourse.isPresent()) {
             throw new AlreadyExistsException("Course already exists");
         }
-
+//        String addedImage = addImage(image);
         Course courseEntity = courseMapper.toCourseEntity(courseDTO);
         Course addedCourse = courseRepository.save(courseEntity);
-        CourseDTO mapperCourseDTO = courseMapper.toCourseDTO(addedCourse);
+        CourseResponseDTO mapperCourseDTO = courseMapper.toCourseDTO(addedCourse);
         return new ApiResponse(true, "success", HttpStatus.CREATED, mapperCourseDTO);
     }
+
+//    private String addImage(MultipartFile image) {
+//        if (image == null || image.isEmpty()) {
+//            return null;
+//        }
+//        try {
+//            String imageFileName = image.getOriginalFilename();
+//            if (imageFileName==null || imageFileName.trim().isEmpty()) {
+//                throw new ResourceNotFoundException("Image name is invalid");
+//            }
+//            String replacedAll = imageFileName.replaceAll("[^a-zA-Z0-9._-]", "_");
+//            String fileName = UUID.randomUUID() + "_" + replacedAll;
+//            Path imagePath = Paths.get(imageDirectory, fileName);
+//            Files.createDirectories(imagePath.getParent()); // Create directories if not exists
+//            Files.write(imagePath, image.getBytes()); // Save the image
+//            return "/images/" + fileName;
+//        } catch (Exception e) {
+//            throw new RuntimeException("Failed to save image: " + e.getMessage());
+//        }
+//
+//    }
+
 
     @Override
     public ApiResponse updateCourse(CourseDTO courseDTO, Long courseId) {
@@ -42,19 +79,19 @@ public class CourseServiceImpl implements CourseService {
                 () -> new ResourceNotFoundException("Course not found"));
         Course courseUpdateEntity = courseMapper.toCourseUpdateEntity(course, courseDTO);
         Course save = courseRepository.save(courseUpdateEntity);
-        CourseDTO mapperCourseDTO = courseMapper.toCourseDTO(save);
+        CourseResponseDTO mapperCourseDTO = courseMapper.toCourseDTO(save);
         return new ApiResponse(true, "success", HttpStatus.OK, mapperCourseDTO);
     }
 
     @Override
     public ApiResponse getCourse(Long courseId) {
         Course course = courseRepository.findByIdAndDeleteFalse(courseId).orElseThrow(() -> new ResourceNotFoundException("Course not found"));
-        CourseDTO mapperCourseDTO = courseMapper.toCourseDTO(course);
+        CourseResponseDTO mapperCourseDTO = courseMapper.toCourseDTO(course);
         return new ApiResponse(true, "success", HttpStatus.OK, mapperCourseDTO);
     }
 
     @Override
-    public CourseDTO getCourseById(Long courseId) {
+    public CourseResponseDTO getCourseById(Long courseId) {
         Course course = courseRepository.findByIdAndDeleteFalse(courseId).orElseThrow(() -> new ResourceNotFoundException("Course not found"));
         return courseMapper.toCourseDTO(course);
     }
@@ -62,13 +99,13 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public ApiResponse getCourses() {
         List<Course> courseList = courseRepository.findAll();
-        List<CourseDTO> courseDTOList = courseList.stream().map(courseMapper::toCourseDTO).toList();
+        List<CourseResponseDTO> courseDTOList = courseList.stream().map(courseMapper::toCourseDTO).toList();
         return new ApiResponse(true, "success", HttpStatus.OK, courseDTOList);
     }
 
 
     @Override
-    public List<CourseDTO> getCoursesList() {
+    public List<CourseResponseDTO> getCoursesList() {
         List<Course> courseList = courseRepository.findAll();
         return courseList
                 .stream()
@@ -82,6 +119,11 @@ public class CourseServiceImpl implements CourseService {
         course.setDelete(true);
         courseRepository.save(course);
         return new ApiResponse(true, "success", HttpStatus.OK, "Course has been deleted");
+    }
+
+    public List<MentorDTO> getAllMentors(){
+        List<User> userList = userRepository.findAll();
+        return userList.stream().map(userMapper::toMentorDTO).toList();
     }
 
 

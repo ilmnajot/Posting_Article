@@ -124,9 +124,9 @@
     <div class="course-grid">
         <!-- Loop through the courses -->
         <div class="course-card" th:each="course : ${courses}">
-            <img src="/images/course-placeholder.jpg" alt="Course Image" th:src="${course.imageUrl != null ? course.imageUrl : '/images/course-placeholder.jpg'}">
+<!--            <img src="/images/course-placeholder.jpg" alt="Course Image" th:src="${course.image != null ? course.image : '/images/course-placeholder.jpg'}">-->
             <div class="course-card-content">
-                <a class="course-title" th:href="@{'/courses/' + ${course.id}}" th:text="${course.title}">Course Title</a>
+                <a class="course-title" th:href="@{'/course-list/' + ${course.id}}" th:text="${course.title}">Course Title</a>
                 <p class="course-description" th:text="${course.description}">This is a brief description of the course.</p>
                 <p class="course-price" th:classappend="${course.free} ? 'free' : ''">
                     <span th:if="${course.free}">Free</span>
@@ -135,7 +135,7 @@
                 <p class="mentor-info">
                     Mentor: <span th:text="${course.mentorId}">Mentor Name</span>
                 </p>
-                <a class="view-details-btn" th:href="@{'/courses/' + ${course.id}}">View Details</a>
+                <a class="view-details-btn" th:href="@{'/course-list/' + ${course.id}}">View Details</a>
             </div>
         </div>
     </div>

@@ -1,7 +1,5 @@
 package uz.ilmnajot.post_article.mapper;
-
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 import uz.ilmnajot.post_article.entity.Category;
 import uz.ilmnajot.post_article.payload.CategoryDTO;
 import uz.ilmnajot.post_article.payload.CategoryResponseDTO;

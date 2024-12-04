@@ -7,6 +7,7 @@ import uz.ilmnajot.post_article.entity.Course;
 import uz.ilmnajot.post_article.entity.Role;
 import uz.ilmnajot.post_article.entity.User;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
+import uz.ilmnajot.post_article.payload.MentorDTO;
 import uz.ilmnajot.post_article.payload.UserDTO;
 import uz.ilmnajot.post_article.payload.UserProfileResponseDTO;
 import uz.ilmnajot.post_article.payload.UserResponseDTO;
@@ -49,4 +50,11 @@ public class UserMapperImpl implements UserMapper {
         return dto;
     }
 
+    @Override
+    public MentorDTO toMentorDTO(User user) {
+        MentorDTO mentorDTO = new MentorDTO();
+        mentorDTO.setId(user.getId());
+        mentorDTO.setFName(user.getFName());
+        return mentorDTO;
+    }
 }

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Add Course</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form div {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input, textarea, select, button {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .success-message, .error-message {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Add New Course</h2>
+    <form th:action="@{/addCourse}" th:object="${course}" method="post">
+        <!-- Title -->
+        <div>
+            <label for="title">Course Title</label>
+            <input type="text" id="title" name="title" th:field="*{title}" placeholder="Enter course title" required>
+            <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="error-message"></p>
+        </div>
+
+        <!-- Description -->
+        <div>
+            <label for="description">Description</label>
+            <textarea id="description" name="description" th:field="*{description}" placeholder="Enter course description" rows="4" required></textarea>
+            <p th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="error-message"></p>
+        </div>
+
+        <!-- Price -->
+        <div>
+            <label for="price">Price (leave empty if free)</label>
+            <input type="number" id="price" name="price" th:field="*{price}" placeholder="Enter course price" min="0" step="0.01">
+            <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="error-message"></p>
+        </div>
+
+        <!-- Lesson Count -->
+        <div>
+            <label for="lessonCount">Lesson Count</label>
+            <input type="number" id="lessonCount" name="lessonCount" th:field="*{lessonCount}" placeholder="Number of lessons" min="1" required>
+            <p th:if="${#fields.hasErrors('lessonCount')}" th:errors="*{lessonCount}" class="error-message"></p>
+        </div>
+
+        <!-- Free -->
+        <div>
+            <label>
+                <input type="checkbox" id="free" name="free" th:field="*{free}"> Is this course free?
+            </label>
+        </div>
+
+        <!-- Mentor -->
+        <div>
+            <label for="mentorId">Select Mentor</label>
+            <select id="mentorId" name="mentorId" th:field="*{mentorId}" required>
+                <option value="" disabled selected>Select a mentor</option>
+                <option th:each="mentor : ${mentors}"
+                        th:value="${mentor.id}"
+                        th:text="${mentor.fName}"></option>
+            </select>
+            <p th:if="${#fields.hasErrors('mentorId')}" th:errors="*{mentorId}" class="error-message"></p>
+        </div>
+
+        <button type="submit">Add Course</button>
+    </form>
+
+    <p th:if="${successMessage}" th:text="${successMessage}" class="success-message"></p>
+    <p th:if="${errorMessage}" th:text="${errorMessage}" class="error-message"></p>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const freeCheckbox = document.getElementById("free");
+        const priceField = document.getElementById("price");
+
+        freeCheckbox.addEventListener("change", () => {
+            if (freeCheckbox.checked) {
+                priceField.value = '';
+                priceField.disabled = true;
+            } else {
+                priceField.disabled = false;
+            }
+        });
+    });
+</script>
+</body>
+</html>
