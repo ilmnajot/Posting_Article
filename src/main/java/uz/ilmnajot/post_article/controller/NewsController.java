@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.ilmnajot.post_article.payload.NewsDTO;
+import uz.ilmnajot.post_article.payload.NewsRequestDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.service.interfaces.NewsService;
 
@@ -20,6 +21,7 @@ public class NewsController {
     }
 
     // Get all news
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     @GetMapping
     public HttpEntity<ApiResponse> getAllNews() {
         ApiResponse apiResponse = newsService.getAllNews();
@@ -27,6 +29,7 @@ public class NewsController {
     }
 
     // Get a single news by ID
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     @GetMapping("/get_news/{id}")
     public HttpEntity<ApiResponse> getNewsById(@PathVariable Long id) {
         ApiResponse apiResponse = newsService.getNewsById(id);
@@ -35,17 +38,19 @@ public class NewsController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PostMapping("/add_news")
-    public ResponseEntity<?> createNews(@RequestBody NewsDTO newsDTO, MultipartFile image) {
+    public ResponseEntity<?> createNews(@RequestBody NewsRequestDTO newsDTO, MultipartFile image) {
         return ResponseEntity.ok(newsService.createNews(newsDTO, image));
     }
 
     // Update an existing news item
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/update_news/{id}")
-    public ResponseEntity<ApiResponse> updateNews(@PathVariable Long id, @RequestBody NewsDTO newsDetails) {
+    public ResponseEntity<ApiResponse> updateNews(@PathVariable Long id, @RequestBody NewsRequestDTO newsDetails) {
         return ResponseEntity.ok(newsService.updateNews(id, newsDetails));
     }
 
     // Delete a news item
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/delete_news/{id}")
     public ResponseEntity<ApiResponse> deleteNews(@PathVariable Long id) {
         ApiResponse apiResponse = newsService.deleteNews(id);

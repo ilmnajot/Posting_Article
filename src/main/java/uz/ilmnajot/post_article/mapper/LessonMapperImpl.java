@@ -1,21 +1,16 @@
 package uz.ilmnajot.post_article.mapper;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uz.ilmnajot.post_article.entity.Course;
 import uz.ilmnajot.post_article.entity.Lesson;
 import uz.ilmnajot.post_article.entity.Module;
 import uz.ilmnajot.post_article.payload.LessonDTO;
 import uz.ilmnajot.post_article.payload.LessonResponseDTO;
-import uz.ilmnajot.post_article.repository.CourseRepository;
-
+@RequiredArgsConstructor
 @Component
 public class LessonMapperImpl implements LessonMapper {
 
-    private final CourseRepository courseRepository;
 
-    public LessonMapperImpl(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
-    }
 
     public Lesson toLessonEntity(Module module, String name, String description, Integer duration, String videoURL) {
 

@@ -9,10 +9,8 @@ public class CourseDTO {
 
     private String title;
     private String description;
-    @PositiveOrZero // Ensures price is non-negative
+    private String mentorName;
     private Double price;
     private Integer lessonCount;
     private boolean free;
-//    private String image;
-    private Long mentorId;
 }

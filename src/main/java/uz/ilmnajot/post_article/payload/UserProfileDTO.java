@@ -21,6 +21,6 @@ public class UserProfileDTO {
 //    private String profileImageURL;
     private String bio;
     private String phoneNumber;
-//    private List<Cou  se> enrolledCoursesIds;
+//    private List<Long> coursesId;
 
 }

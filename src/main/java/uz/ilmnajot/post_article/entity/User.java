@@ -38,12 +38,18 @@ public class User extends AbstractEntity implements UserDetails {
     private String profileImageURL;
     private String bio;
     private String phoneNumber;
+
+    // Relationship for enrolled courses
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_courses",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
     private Set<Course> enrolledCourses;
+
+    // Relationship for courses created by the user (admin role)
+    @OneToMany(mappedBy = "manager", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Course> createdCourses;
 
 
     public User(String fName, String lName, String email, String password, Role role, boolean isEnable) {

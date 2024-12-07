@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import uz.ilmnajot.post_article.entity.Course;
 import uz.ilmnajot.post_article.entity.Lesson;
 import uz.ilmnajot.post_article.entity.Module;
 import uz.ilmnajot.post_article.enums.ResponseMessage;

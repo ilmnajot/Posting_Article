@@ -1,5 +1,6 @@
 package uz.ilmnajot.post_article.mapper;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import uz.ilmnajot.post_article.entity.Article;
 import uz.ilmnajot.post_article.entity.Rating;
@@ -11,19 +12,13 @@ import uz.ilmnajot.post_article.repository.UserRepository;
 import uz.ilmnajot.post_article.service.interfaces.ArticleService;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
-
+@RequiredArgsConstructor
 @Component
 public class RatingMapperImpl implements RatingMapper {
 
     private final ArticleRepository articleRepository;
-    private final ArticleService articleService;
     private final UserRepository userRepository;
 
-    public RatingMapperImpl(ArticleRepository articleRepository, ArticleService articleService, UserRepository userRepository) {
-        this.articleRepository = articleRepository;
-        this.articleService = articleService;
-        this.userRepository = userRepository;
-    }
 
     public Rating toRatingEntity(RatingDTO ratingDTO) {
         Article article = articleRepository.findByIdAndDeleteFalse(ratingDTO.getArticleId()).orElseThrow(() -> new ResourceNotFoundException("Article not found"));

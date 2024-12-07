@@ -8,6 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.ilmnajot.post_article.payload.NewsDTO;
+import uz.ilmnajot.post_article.payload.NewsRequestDTO;
+import uz.ilmnajot.post_article.payload.NewsResponseDTO;
 import uz.ilmnajot.post_article.service.interfaces.NewsService;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public class ViewNewsController {
 //    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/news/details/{id}")
     public String viewNewsDetails(@PathVariable Long id, Model model) {
-        NewsDTO news = newsService.getNews(id);
+        NewsResponseDTO news = newsService.getNews(id);
         model.addAttribute("news", news);
         return "details";
     }
@@ -36,7 +38,7 @@ public class ViewNewsController {
 
 //    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/news/add-news")
-    public String addNews(@ModelAttribute("news") NewsDTO newsDTO,
+    public String addNews(@ModelAttribute("news") NewsRequestDTO newsDTO,
                           @RequestParam("image") MultipartFile image,
                           BindingResult result,
                           Model model) {
@@ -56,7 +58,7 @@ public class ViewNewsController {
 //    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @GetMapping("/news-list")
     public String viewNewsList(Model model) {
-        List<NewsDTO> news = newsService.getAllNewsList();
+        List<NewsResponseDTO> news = newsService.getAllNewsList();
         model.addAttribute("newsList", news);
         return "news-list";
     }
@@ -65,7 +67,7 @@ public class ViewNewsController {
 //    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @GetMapping("/news")
     public String showNewsPage(Model model) {
-        List<NewsDTO> news = newsService.getAllNewsList();
+        List<NewsResponseDTO> news = newsService.getAllNewsList();
         model.addAttribute("newsList", news);
         return "news";
     }

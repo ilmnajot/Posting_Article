@@ -1,35 +1,20 @@
 package uz.ilmnajot.post_article.mapper;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import uz.ilmnajot.post_article.entity.Article;
-import uz.ilmnajot.post_article.entity.Category;
 import uz.ilmnajot.post_article.entity.Topic;
-import uz.ilmnajot.post_article.entity.User;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
 import uz.ilmnajot.post_article.payload.ArticleDTO;
 import uz.ilmnajot.post_article.payload.ArticleResponseDTO;
-import uz.ilmnajot.post_article.repository.ArticleRepository;
-import uz.ilmnajot.post_article.repository.CategoryRepository;
 import uz.ilmnajot.post_article.repository.TopicRepository;
-import uz.ilmnajot.post_article.repository.UserRepository;
 import uz.ilmnajot.post_article.utils.MessageKey;
-
+@RequiredArgsConstructor
 @Component
 public class ArticleMapperImpl implements ArticleMapper {
 
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
-    private final ArticleRepository articleRepository;
     private final TopicRepository topicRepository;
 
-    public ArticleMapperImpl(UserRepository userRepository, CategoryRepository categoryRepository, ArticleRepository articleRepository, TopicRepository topicRepository) {
-        this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
-        this.articleRepository = articleRepository;
-        this.topicRepository = topicRepository;
-    }
 
     public Article toArticleEntity(ArticleDTO articleDTO) {
 //        User user = userRepository.findByIdAndDeleteFalse(articleDTO.getAuthorId()).orElseThrow(

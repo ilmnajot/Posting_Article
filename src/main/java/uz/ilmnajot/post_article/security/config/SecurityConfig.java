@@ -36,12 +36,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authRequest -> authRequest
-//                        .requestMatchers(getWhitelist())
-//                        .permitAll()
-//                        .requestMatchers(getCustomWhitelist())
-//                        .permitAll()
-                        .anyRequest().permitAll()
-//                        .authenticated()
+                        .requestMatchers(getWhitelist()).permitAll()
+                        .requestMatchers(getCustomWhitelist()).permitAll()
+                        .anyRequest()
+                        .authenticated()
                 )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
@@ -86,27 +84,27 @@ public class SecurityConfig {
         };
     }
 
-    private String [] getCustomWhitelist(){
+    private String[] getCustomWhitelist() {
         return new String[]{
-                "/api/auth/**,",
-                "/login",
-                "/sign-up",
-                "/email-verify",
-                "/verify-email",
+                "/api/auth/**",
+//                "/login",
+//                "/sign-up",
+//                "/email-verify",
+//                "/verify-email",
                 "/home",
-                "/verification-success",
-                "/category-list",
-                "/topics/**",
-                "/topic-list/**",
-                "/category-list",
-                "/categories/**",
-                "/articles/**",
-                "/topics/topicId/articles",
-                "/topics/topicId/articles/articleId",
-                "/news-list",
-                "/news",
-                "/details/id",
-                "/aboutus",
+//                "/verification-success",
+//                "/category-list",
+//                "/topics/**",
+//                "/topic-list/**",
+//                "/category-list",
+//                "/categories/**",
+//                "/articles/**",
+//                "/topics/topicId/articles",
+//                "/topics/topicId/articles/articleId",
+//                "/news-list",
+//                "/news",
+//                "/details/id",
+//                "/aboutus",
 
         };
     }

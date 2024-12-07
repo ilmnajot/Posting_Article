@@ -26,9 +26,9 @@ public class ViewCourseController {
     @GetMapping("/addCourse")
     public String addCourse(Model model) {
         CourseDTO courseDTO = new CourseDTO();
-        List<MentorDTO> allMentors = courseService.getAllMentors();
+//        List<MentorDTO> allMentors = courseService.getAllMentors();
         model.addAttribute("course", courseDTO);
-        model.addAttribute("mentors", allMentors);
+//        model.addAttribute("mentors", allMentors);
         return "add-course";
     }
 

@@ -35,7 +35,7 @@ public class HttpCustomResponse<T> {
 
     public HttpCustomResponse(String message, String path, Integer errorCode) {
         this.success = false;
-        this.errorData = Collections.singletonList(new ErrorData(message, path, errorCode));
+        this.errorData = Collections.singletonList(new ErrorData(message, errorCode, path));
     }
 
     public HttpCustomResponse(List<ErrorData> errorData) {

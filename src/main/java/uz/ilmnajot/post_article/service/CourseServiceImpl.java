@@ -1,10 +1,7 @@
 package uz.ilmnajot.post_article.service;
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import uz.ilmnajot.post_article.entity.Course;
 import uz.ilmnajot.post_article.entity.User;
 import uz.ilmnajot.post_article.exception.AlreadyExistsException;
@@ -19,12 +16,9 @@ import uz.ilmnajot.post_article.repository.CourseRepository;
 import uz.ilmnajot.post_article.repository.UserRepository;
 import uz.ilmnajot.post_article.service.interfaces.CourseService;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +27,6 @@ public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
 
 //    @Value("${upload.dir}")
 //    private String imageDirectory;
@@ -45,6 +38,7 @@ public class CourseServiceImpl implements CourseService {
             throw new AlreadyExistsException("Course already exists");
         }
 //        String addedImage = addImage(image);
+
         Course courseEntity = courseMapper.toCourseEntity(courseDTO);
         Course addedCourse = courseRepository.save(courseEntity);
         CourseResponseDTO mapperCourseDTO = courseMapper.toCourseDTO(addedCourse);
@@ -92,14 +86,18 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseResponseDTO getCourseById(Long courseId) {
-        Course course = courseRepository.findByIdAndDeleteFalse(courseId).orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+        Course course = courseRepository.findByIdAndDeleteFalse(courseId).orElseThrow(
+                () -> new ResourceNotFoundException("Course not found"));
         return courseMapper.toCourseDTO(course);
     }
 
     @Override
     public ApiResponse getCourses() {
         List<Course> courseList = courseRepository.findAll();
-        List<CourseResponseDTO> courseDTOList = courseList.stream().map(courseMapper::toCourseDTO).toList();
+        List<CourseResponseDTO> courseDTOList = courseList
+                .stream()
+                .map(courseMapper::toCourseDTO)
+                .toList();
         return new ApiResponse(true, "success", HttpStatus.OK, courseDTOList);
     }
 
@@ -115,16 +113,28 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public ApiResponse deleteCourse(Long courseId) {
-        Course course = courseRepository.findByIdAndDeleteFalse(courseId).orElseThrow(() -> new ResourceNotFoundException("Course not found"));
+        Course course = courseRepository.findByIdAndDeleteFalse(courseId).orElseThrow(
+                () -> new ResourceNotFoundException("Course not found"));
         course.setDelete(true);
         courseRepository.save(course);
         return new ApiResponse(true, "success", HttpStatus.OK, "Course has been deleted");
     }
 
-    public List<MentorDTO> getAllMentors(){
-        List<User> userList = userRepository.findAll();
-        return userList.stream().map(userMapper::toMentorDTO).toList();
-    }
+//    public List<MentorDTO> getAllMentors(){
+//        List<User> userList = userRepository.findAll();
+//        return userList.stream().map(userMapper::toMentorDTO).toList();
+//    }
 
+    public Course getCourseByCourseId(Long courseId) {
+        return courseRepository.findByIdAndDeleteFalse(courseId).orElseThrow(
+                () -> new ResourceNotFoundException("Course not found"));
+    }
+    public List<CourseResponseDTO> getCoursesByUserId(Long userId) {
+        Set<Course> coursesByUserId = courseRepository.getCoursesByUserId(userId);
+        return coursesByUserId
+                .stream()
+                .map(courseMapper::toCourseDTO)
+                .toList();
+    }
 
 }

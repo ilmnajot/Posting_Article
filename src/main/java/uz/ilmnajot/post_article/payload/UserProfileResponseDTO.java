@@ -13,7 +13,7 @@ public class UserProfileResponseDTO {
     private String fName;
     private String lName;
     private String email;
-    private String profileImageURL;
+//    private String profileImageURL;
     private String bio;
     private String phoneNumber;
     private List<Long> enrolledCoursesIds;

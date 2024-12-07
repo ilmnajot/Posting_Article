@@ -10,6 +10,8 @@ import uz.ilmnajot.post_article.exception.AlreadyExistsException;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
 import uz.ilmnajot.post_article.mapper.NewsMapper;
 import uz.ilmnajot.post_article.payload.NewsDTO;
+import uz.ilmnajot.post_article.payload.NewsRequestDTO;
+import uz.ilmnajot.post_article.payload.NewsResponseDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.repository.NewsRepository;
 import uz.ilmnajot.post_article.service.interfaces.CategoryService;
@@ -36,34 +38,36 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public ApiResponse getAllNews() {
         List<News> newsList = newsRepository.findAll();
-        List<NewsDTO> newsDTOList = newsList.stream().map(newsMapper::toNewsDTO).toList();
+        List<NewsResponseDTO> newsDTOList = newsList.stream().map(newsMapper::toNewsDTO).toList();
         return new ApiResponse(true, "success", HttpStatus.CREATED, newsDTOList);
     }
 
     @Override
-    public List<NewsDTO> getAllNewsList() {
+    public List<NewsResponseDTO> getAllNewsList() {
         List<News> newsList = newsRepository.findAll();
-        List<NewsDTO> newsDTOList = newsList.stream().map(newsMapper::toNewsDTO).toList();
-        return newsDTOList;
+        return newsList
+                .stream()
+                .map(newsMapper::toNewsDTO)
+                .toList();
     }
 
     @Override
     public ApiResponse getNewsById(Long id) {
         News news = newsRepository.findByIdAndDeleteFalse(id).orElseThrow(
                 () -> new ResourceNotFoundException("news not found"));
-        NewsDTO newsDTO = newsMapper.toNewsDTO(news);
+        NewsResponseDTO newsDTO = newsMapper.toNewsDTO(news);
         return new ApiResponse(true, "success", HttpStatus.OK, newsDTO);
     }
 
     @Override
-    public NewsDTO getNews(Long id) {
+    public NewsResponseDTO getNews(Long id) {
         News news = newsRepository.findByIdAndDeleteFalse(id).orElseThrow(
                 () -> new ResourceNotFoundException("news not found"));
         return newsMapper.toNewsDTO(news);
     }
 
     @Override
-    public NewsDTO createNews(NewsDTO newsDTO, MultipartFile image) {
+    public NewsResponseDTO createNews(NewsRequestDTO newsDTO, MultipartFile image) {
         Optional<News> optionalNews = newsRepository.findByTitleAndDeleteFalse(newsDTO.getTitle());
         if (optionalNews.isPresent()) {
             throw new AlreadyExistsException("News already exists");
@@ -97,11 +101,12 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public ApiResponse updateNews(Long id, NewsDTO newsDetails) {
-        News news = newsRepository.findByIdAndDeleteFalse(id).orElseThrow(() -> new ResourceNotFoundException("News not found"));
+    public ApiResponse updateNews(Long id, NewsRequestDTO newsDetails) {
+        News news = newsRepository.findByIdAndDeleteFalse(id).orElseThrow(
+                () -> new ResourceNotFoundException("News not found"));
         News updateNewsEntity = newsMapper.toUpdateNewsEntity(news, newsDetails);
         News news1 = newsRepository.save(updateNewsEntity);
-        NewsDTO newsDTO = newsMapper.toNewsDTO(news1);
+        NewsResponseDTO newsDTO = newsMapper.toNewsDTO(news1);
         return new ApiResponse(true, "success", HttpStatus.OK, newsDTO);
     }
 

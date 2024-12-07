@@ -1,22 +1,23 @@
 package uz.ilmnajot.post_article.service.interfaces;
 
-import uz.ilmnajot.post_article.entity.Course;
 import uz.ilmnajot.post_article.entity.User;
-import uz.ilmnajot.post_article.payload.CourseDTO;
-import uz.ilmnajot.post_article.payload.UserDTO;
-import uz.ilmnajot.post_article.payload.UserProfileDTO;
+import uz.ilmnajot.post_article.payload.*;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 
-import java.util.Set;
+import java.util.List;
 
 public interface UserService {
-    UserProfileDTO getUserById(Long id);
+    ApiResponse getUserById(Long id);
 
-    ApiResponse updateUserProfile(Long userId, UserDTO userDTO);
+    ApiResponse updateUserProfile(Long userId, UserProfileDTO userDTO);
 
     ApiResponse enrollInCourse(Long userId, Long courseId);
 
-    Set<CourseDTO> getEnrolledCourses(Long userId);
+    List<CourseResponseDTO> getEnrolledCourses(Long userId);
 
     ApiResponse unEnrollFromCourse(Long userId, Long courseId);
+
+    User getUser(Long userId);
+
+
 }

@@ -1,9 +1,7 @@
 package uz.ilmnajot.post_article.mapper;
 
 import uz.ilmnajot.post_article.entity.User;
-import uz.ilmnajot.post_article.payload.MentorDTO;
-import uz.ilmnajot.post_article.payload.UserDTO;
-import uz.ilmnajot.post_article.payload.UserResponseDTO;
+import uz.ilmnajot.post_article.payload.*;
 
 public interface UserMapper {
 
@@ -12,6 +10,10 @@ public interface UserMapper {
     UserResponseDTO toUserResponseDTO(User user);
 
     MentorDTO toMentorDTO(User user);
+
+    UserProfileResponseDTO toUserProfileEntity(User user);
+    User toUserProfileUpdateEntity(UserProfileDTO userProfileDTO,User user);
+
 
 
 }

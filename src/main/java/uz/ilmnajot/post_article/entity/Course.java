@@ -15,7 +15,7 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "course")
 @Builder
 public class Course extends AbstractEntity {
 
@@ -23,6 +23,11 @@ public class Course extends AbstractEntity {
     @Size(max = 100) // Adjust max length as needed
     @Column(nullable = false, unique = true)
     private String title;
+
+    @NotBlank
+    @Size(max = 100) // Adjust max length as needed
+    @Column(nullable = false)
+    private String mentorName;
 
     @Size(max = 500) // Optional for descriptions
     private String description;
@@ -34,18 +39,16 @@ public class Course extends AbstractEntity {
 
     private boolean free;
 
-//    private String image;
-
     @ManyToOne
-    private User mentor;
+    private User manager; // The admin who created the course
+
+    @ManyToMany(mappedBy = "enrolledCourses")
+    private Set<User> enrolledUsers;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true) //it won't be created...
     private List<Module> modules;
 
 //    @ManyToOne
 //    private Category category;
-
-    @ManyToMany(mappedBy = "enrolledCourses", fetch = FetchType.LAZY)
-    private Set<User> enrolledUsers;
 
 }
