@@ -34,6 +34,7 @@ public class ArticleController {
         ApiResponse apiResponse = articleService.getArticle(articleId);
         return ResponseEntity.ok(apiResponse);
     }
+
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER','AUTHOR')")
     @GetMapping("/getAllArticles")
     public HttpEntity<ApiResponse> getAllArticles() {
@@ -74,8 +75,9 @@ public class ArticleController {
         List<ArticleResponseDTO> articles = articleService.getArticlesByTopicId(topicId);
         return ResponseEntity.ok(articles);
     }
+
     @GetMapping("/getArticle/{topicId}")
-    public HttpEntity<?> getArticleById(@PathVariable(name = "topicId") Long topicId){
+    public HttpEntity<?> getArticleById(@PathVariable(name = "topicId") Long topicId) {
         ArticleResponseDTO responseDTO = articleService.getArticleByTopicId(topicId);
         return ResponseEntity.ok(responseDTO);
     }

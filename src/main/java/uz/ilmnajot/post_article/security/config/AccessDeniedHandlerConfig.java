@@ -10,7 +10,9 @@ public class AccessDeniedHandlerConfig {
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
-        return ((request, response, accessDeniedException) -> {
+        return ((request,
+                 response,
+                 accessDeniedException) -> {
             response.setContentType("application/json");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write("{\"error\":\"Access denied}");

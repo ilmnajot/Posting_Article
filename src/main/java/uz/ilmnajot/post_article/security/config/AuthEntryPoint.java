@@ -10,10 +10,13 @@ public class AuthEntryPoint {
 
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
-        return ((request, response, authException) -> {
-            response.setContentType("application/json");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("{\"error\":\"Unauthorized access\"}");
-        });
+        return (
+                (request,
+                 response,
+                 authException) -> {
+                    response.setContentType("application/json");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("{\"error\":\"Unauthorized access\"}");
+                });
     }
 }

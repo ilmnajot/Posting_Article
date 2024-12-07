@@ -1,6 +1,9 @@
 package uz.ilmnajot.post_article.controller;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -36,9 +39,11 @@ public class NewsController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @ApiOperation(value = "Add News", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    @PostMapping("/add_news")
-    public ResponseEntity<?> createNews(@RequestBody NewsRequestDTO newsDTO, MultipartFile image) {
+    @PostMapping(value = "/add_news", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> createNews(@RequestPart("news") NewsRequestDTO newsDTO,
+                                        @RequestPart("image") MultipartFile image) {
         return ResponseEntity.ok(newsService.createNews(newsDTO, image));
     }
 
