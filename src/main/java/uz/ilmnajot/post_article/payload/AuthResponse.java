@@ -9,5 +9,5 @@ import uz.ilmnajot.post_article.entity.User;
 public class AuthResponse {
 
     private String token;
-    private User user;
+    private UserProfileResponseDTO user;
 }

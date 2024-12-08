@@ -3,78 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categories</title>
+    <title>Topics</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f0f4f8;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            margin: 0;
+            padding: 0;
+            text-align: center;
         }
         h1 {
-            margin: 20px 0;
+            margin-top: 20px;
             color: #333;
+            font-size: 28px;
         }
-        .category-container {
-            display: flex;
-            flex-wrap: wrap;
+        .topic-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
-            justify-content: center;
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
         }
-        .category-card {
+        .topic-card {
             background: white;
-            width: 200px;
-            padding: 15px;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
+            text-decoration: none; /* Remove underline */
+            color: inherit; /* Preserve text color */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .category-card img {
-            width: 100%;
-            height: auto;
-            margin-bottom: 10px;
-            border-radius: 5px;
+        .topic-card h2 {
+            margin: 10px 0;
+            font-size: 18px;
+            color: #007bff;
         }
-        .navbar a:hover {
-            color: #f1c40f;
+        .topic-card p {
+            color: #555;
+            font-size: 14px;
         }
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: color 0.3s;
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
         }
-        .navbar {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            background-color: #005073;
-            padding: 15px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            color: white;
+        .no-topics {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #777;
         }
     </style>
 </head>
 <body>
-<h1>Categories</h1>
-<header class="navbar">
-    <a href="/addCategory">Add Category</a>
-    <a href="/addArticle">Add Article</a>
-</header>
-
-<div class="category-container">
-    <!-- Ensure 'categories' is not null in your controller -->
-    <div class="category-card" th:each="topic : ${topics}">
-        <h2 th:text="${category.name}">Category Name</h2>
-        <p th:text="${category.description}">Category Description</p>
-    </div>
-    <div th:if="${categories == null or #lists.isEmpty(categories)}">
-        <p>No categories available.</p>
-    </div>
-
+<h1 th:text="'Topics in ' + ${categoryName}">Topics in Category</h1>
+<div class="topic-container">
+    <!-- Loop through topics -->
+    <a class="topic-card" th:each="topic : ${topics}" th:href="@{/topics/{topicId}/articles(topicId=${topic.id})}">
+        <h2 th:text="${topic.title}">Topic Title</h2>
+        <p th:text="${topic.description}">Topic Description</p>
+    </a>
+</div>
+<!-- Display message if no topics are available -->
+<div class="no-topics" th:if="${topics == null || #lists.isEmpty(topics)}">
+    <p>No topics available.</p>
 </div>
 </body>
 </html>

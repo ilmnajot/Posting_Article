@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Article</title>
@@ -88,6 +89,21 @@
             color: #721c24;
             border: 1px solid #f5c6cb;
         }
+
+        .form-field .add-topic-btn {
+            margin-top: 10px;
+            background-color: #2196F3;
+            color: white;
+            padding: 8px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .form-field .add-topic-btn:hover {
+            background-color: #1976D2;
+        }
     </style>
 </head>
 <body>
@@ -103,43 +119,86 @@
         <p th:text="${success}"></p>
     </div>
 
-    <form th:action="@{/addArticle}" method="post" th:object="${article}">
+    <form th:action="@{/add-article}" method="post" th:object="${article}">
         <!-- Article Title -->
         <div class="form-field">
             <label for="title">Title:</label>
             <input type="text" th:field="*{title}" id="title" placeholder="Enter the article title" required>
-            <div th:if="${#fields.hasErrors('title')}" class="alert error">
-                <p th:each="err : ${#fields.errors('title')}" th:text="${err}"></p>
-            </div>
         </div>
 
         <!-- Article Content -->
         <div class="form-field">
             <label for="content">Content:</label>
             <textarea th:field="*{content}" id="content" rows="6" placeholder="Write the article content..." required></textarea>
-            <div th:if="${#fields.hasErrors('content')}" class="alert error">
-                <p th:each="err : ${#fields.errors('content')}" th:text="${err}"></p>
-            </div>
         </div>
 
-        <!-- Select Category -->
+        <!-- Select or Add Topic -->
         <div class="form-field">
             <label for="topic">Topic:</label>
             <select th:field="*{topicId}" id="topic" required>
                 <option value="" disabled selected>Select Topic</option>
                 <option th:each="topic : ${topics}"
                         th:value="${topic.id}"
-                        th:text="${topic.name}"></option>
+                        th:text="${topic.title}"></option>
             </select>
-            <div th:if="${#fields.hasErrors('categoryId')}" class="alert error">
-                <p th:each="err : ${#fields.errors('categoryId')}" th:text="${err}"></p>
-            </div>
+            <button type="button" class="add-topic-btn" onclick="showAddTopicModal()">+ Add New Topic</button>
         </div>
 
         <!-- Submit Button -->
         <button type="submit" class="btn">Add Article</button>
     </form>
 </div>
+
+<!-- Add Topic Modal -->
+<div id="add-topic-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
+    <h2>Add New Topic</h2>
+    <form id="add-topic-form">
+        <label for="new-topic-title">Title:</label>
+        <input type="text" id="new-topic-title" placeholder="Enter topic title" required>
+        <label for="new-topic-description">Description:</label>
+        <textarea id="new-topic-description" placeholder="Enter topic description" rows="4"></textarea>
+        <button type="button" class="btn" onclick="addTopic()">Add Topic</button>
+        <button type="button" class="btn" style="background: gray;" onclick="closeModal()">Cancel</button>
+    </form>
+</div>
+
+<script>
+    // Show the Add Topic Modal
+    function showAddTopicModal() {
+        document.getElementById("add-topic-modal").style.display = "block";
+    }
+
+    // Close the Modal
+    function closeModal() {
+        document.getElementById("add-topic-modal").style.display = "none";
+    }
+
+    // Add New Topic to the Select Dropdown
+    function addTopic() {
+        const title = document.getElementById("new-topic-title").value.trim();
+        const description = document.getElementById("new-topic-description").value.trim();
+
+        if (title === "") {
+            alert("Topic title is required!");
+            return;
+        }
+
+        // Optionally send topic to the backend via AJAX
+        // Here we just add it to the dropdown dynamically
+        const select = document.getElementById("topic");
+        const option = document.createElement("option");
+        option.value = "new-" + Math.random(); // Simulated ID
+        option.textContent = title;
+        option.selected = true;
+        select.appendChild(option);
+
+        // Close modal and clear input fields
+        closeModal();
+        document.getElementById("new-topic-title").value = "";
+        document.getElementById("new-topic-description").value = "";
+    }
+</script>
 
 </body>
 </html>

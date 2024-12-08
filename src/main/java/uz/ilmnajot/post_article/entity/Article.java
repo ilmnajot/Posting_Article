@@ -17,15 +17,16 @@ public class Article extends AbstractEntity {
 
     @Column(nullable = false, unique = true)
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String content;
 
 //    @ManyToOne
 //    @JoinColumn(name = "user_id", nullable = false)
 //    private User author;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+//    @ManyToOne
+//    @JoinColumn(name = "category_id", nullable = false)
+//    private Category category;
 
     @ManyToOne
     @JoinColumn(name = "topic_id", nullable = false)

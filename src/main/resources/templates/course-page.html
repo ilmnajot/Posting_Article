@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Course Details</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Courses</h1>
+<!--    <ul>-->
+<!--        <li th:each="lesson : ${lessons}">-->
+<!--            <a th:href="@{/-list/{id}(id=${course.id})}" th:text="${course.title}"></a>-->
+<!--        </li>-->
+<!--    </ul>-->
+
+    <div th:if="${selectedCourse}">
+        <h2 th:text="${selectedCourse.title}"></h2>
+        <p th:text="${selectedCourse.description}"></p>
+        <p>
+            Price: <span th:text="${selectedCourse.free} ? 'Free' : '${selectedCourse.price} USD'"></span>
+        </p>
+<!--        <img th:src="${selectedCourse.image}" alt="Course Image">-->
+    </div>
+</div>
+</body>
+</html>

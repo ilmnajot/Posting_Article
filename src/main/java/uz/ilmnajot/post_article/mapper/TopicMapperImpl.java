@@ -1,5 +1,6 @@
 package uz.ilmnajot.post_article.mapper;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import uz.ilmnajot.post_article.entity.Category;
 import uz.ilmnajot.post_article.entity.Topic;
@@ -7,15 +8,12 @@ import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
 import uz.ilmnajot.post_article.payload.TopicRequestDTO;
 import uz.ilmnajot.post_article.payload.TopicResponseDTO;
 import uz.ilmnajot.post_article.repository.CategoryRepository;
-
+@RequiredArgsConstructor
 @Component
 public class TopicMapperImpl implements TopicMapper {
 
     private final CategoryRepository categoryRepository;
 
-    public TopicMapperImpl(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
 
     @Override
     public Topic toTopicEntity(TopicRequestDTO topicRequestDTO) {

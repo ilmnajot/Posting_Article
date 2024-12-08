@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Articles in ' + ${topic.title}">Articles</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .article-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .article-content {
+            padding: 15px;
+        }
+        .article-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0 0 10px;
+        }
+        .article-summary {
+            font-size: 16px;
+            color: #666;
+            margin: 0 0 15px;
+        }
+        .read-more {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+        .read-more:hover {
+            background-color: #0056b3;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            font-size: 16px;
+            color: #007BFF;
+            transition: color 0.2s ease;
+        }
+        .back-link:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<header th:text="'Articles in ' + ${topic.title}">Articles</header>
+<div class="container">
+    <a th:href="@{/topics/{topicId}/articles/{articleId}(topicId=${topic.id})} " class="read-more">Read More</a> <!, , articleId=${article.id}!>
+    <div class="articles-grid">
+        <div class="article-card" th:each="article : ${articles}">
+            <div class="article-content">
+                <h3 class="article-title" th:text="${article.title}">Article Title</h3>
+                <p class="article-summary"
+                   th:text="${article.content != null ? (#strings.length(article.content) > 5 ? article.content.substring(0, 150) + '...' : article.content) : 'No content available'}">
+                    Article summary...
+                </p>
+
+                <a th:href="@{/topics/{topicId}/articles/{articleId}(topicId=${topic.id}, articleId=${article.id})}"
+                   class="read-more">Read More</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

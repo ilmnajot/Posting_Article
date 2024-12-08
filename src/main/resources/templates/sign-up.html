@@ -12,8 +12,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: no-repeat  fixed;
-            background-image: url("/register.png");
+            background: url("/images/register.png") no-repeat  fixed;
             background-size: contain;
 
         }
@@ -81,16 +80,24 @@
 
     <form th:action="@{/sign-up}" method="post" th:object="${user}">
         <!-- First Name -->
-        <input type="text" th:field="*{FName}" placeholder="Enter your first name" required>
+        <label>
+            <input type="text" th:field="*{FName}" placeholder="Enter your first name" required>
+        </label>
 
         <!-- Last Name -->
-        <input type="text" th:field="*{LName}" placeholder="Enter your last name" required>
+        <label>
+            <input type="text" th:field="*{LName}" placeholder="Enter your last name" required>
+        </label>
 
         <!-- Email -->
-        <input type="email" th:field="*{email}" placeholder="Enter your email" required>
+        <label>
+            <input type="email" th:field="*{email}" placeholder="Enter your email" required>
+        </label>
 
         <!-- Password -->
-        <input type="password" th:field="*{password}" placeholder="Enter your password" required>
+        <label>
+            <input type="password" th:field="*{password}" placeholder="Enter your password" required>
+        </label>
 
         <input type="submit" value="Register">
     </form>

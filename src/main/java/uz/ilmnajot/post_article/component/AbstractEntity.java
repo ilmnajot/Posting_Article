@@ -31,10 +31,10 @@ public abstract class AbstractEntity {
     private Timestamp updatedAt;
 
     @CreatedBy
-    private UUID createdBy;
+    private Long createdBy;
 
     @LastModifiedBy
-    private UUID updatedBy;
+    private Long updatedBy;
 
     private boolean delete;
 }

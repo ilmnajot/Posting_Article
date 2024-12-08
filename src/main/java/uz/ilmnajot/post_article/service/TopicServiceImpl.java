@@ -5,11 +5,15 @@ import org.springframework.stereotype.Service;
 import uz.ilmnajot.post_article.entity.Topic;
 import uz.ilmnajot.post_article.exception.AlreadyExistsException;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
+import uz.ilmnajot.post_article.mapper.ArticleMapper;
 import uz.ilmnajot.post_article.mapper.TopicMapper;
+import uz.ilmnajot.post_article.payload.ArticleResponseDTO;
 import uz.ilmnajot.post_article.payload.TopicRequestDTO;
 import uz.ilmnajot.post_article.payload.TopicResponseDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
+import uz.ilmnajot.post_article.repository.ArticleRepository;
 import uz.ilmnajot.post_article.repository.TopicRepository;
+import uz.ilmnajot.post_article.service.interfaces.TopicService;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,10 +23,14 @@ public class TopicServiceImpl implements TopicService {
 
     private final TopicRepository topicRepository;
     private final TopicMapper topicMapper;
+    private final ArticleMapper articleMapper;
+    private final ArticleRepository articleRepository;
 
-    public TopicServiceImpl(TopicRepository topicRepository, TopicMapper topicMapper) {
+    public TopicServiceImpl(TopicRepository topicRepository, TopicMapper topicMapper, ArticleMapper articleMapper, ArticleRepository articleRepository) {
         this.topicRepository = topicRepository;
         this.topicMapper = topicMapper;
+        this.articleMapper = articleMapper;
+        this.articleRepository = articleRepository;
     }
 
     @Override
@@ -44,11 +52,18 @@ public class TopicServiceImpl implements TopicService {
         return new ApiResponse(true, "success", HttpStatus.OK, topicDTO);
     }
 
+
+    @Override
+    public TopicResponseDTO getTopicByID(Long topicId) {
+        Topic topicById = getTopicById(topicId);
+        TopicResponseDTO topicDTO = topicMapper.toTopicDTO(topicById);
+        return topicDTO;
+    }
+
     @Override
     public List<TopicResponseDTO> getAllTopics() {
         List<Topic> all = topicRepository.findAll();
-        List<TopicResponseDTO> topicRequestDTOList = all.stream().map(topicMapper::toTopicDTO).toList();
-        return topicRequestDTOList;
+        return all.stream().map(topicMapper::toTopicDTO).toList();
     }
 
     @Override
@@ -69,9 +84,17 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public ApiResponse getTopicsByCategoryId(Long categoryId) {
+    public List<TopicResponseDTO> getTopicsByCategoryId(Long categoryId) {
         List<Topic> topicList = topicRepository.findAllByCategory_Id(categoryId);
-        return new ApiResponse(true, "success", HttpStatus.OK, topicList);
+        return topicList.stream().map(topicMapper::toTopicDTO).toList();
+    }
+
+    @Override
+    public List<ArticleResponseDTO> getArticlesByTopicId(Long topicId) {
+        return articleRepository
+                .findAllByTopic_Id(topicId)
+                .stream().map(articleMapper::toArticleDTO)
+                .toList();
     }
 
     private Topic getTopicById(Long topicId) {

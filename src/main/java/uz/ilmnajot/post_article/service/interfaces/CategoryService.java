@@ -8,9 +8,11 @@ import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import java.util.List;
 
 public interface CategoryService {
-    ApiResponse addCategory(CategoryDTO categoryDTO, MultipartFile image);
+    ApiResponse addCategory(String name, String description, MultipartFile image);
 
     ApiResponse getCategory(Long categoryId);
+
+    CategoryResponseDTO getCategoryByID(Long categoryId);
 
     ApiResponse getAllCategories();
 
@@ -21,4 +23,5 @@ public interface CategoryService {
     ApiResponse updateCategory(Long categoryId, CategoryDTO categoryDTO);
 
     ApiResponse getAllRemovedCategories();
+
 }

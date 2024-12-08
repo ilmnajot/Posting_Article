@@ -30,7 +30,7 @@ public class JwtFilter extends OncePerRequestFilter {
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
-        if (request.getServletPath().equals("api/v1/auth")){
+        if (request.getServletPath().equals("/api/v1/auth")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -54,11 +54,14 @@ public class JwtFilter extends OncePerRequestFilter {
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
-            }catch (Exception exception){
-                throw new ServletException(exception.getMessage());
+            } catch (Exception exception) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write(exception.getMessage());
+                response.getWriter().flush();
+                return;
             }
         }
         filterChain.doFilter(request, response);
     }
-    }
+}
 

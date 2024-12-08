@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f4f8;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 20px;
+            color: #333;
+        }
+        .article-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .article-card {
+            background: white;
+            width: 300px;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .article-card a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        .article-card a:hover {
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+<h1 th:text="'Articles in ' + ${topic.title}">Articles</h1>
+<div class="article-container">
+    <div class="article-card" th:each="article : ${articles}">
+        <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}">Article Title</a>
+        <p th:utext="${article.content.substring(0, 150)} + '...'">Short Article Preview</p>
+    </div>
+    <div th:if="${articles == null or #lists.isEmpty(articles)}">
+        <p>No articles available.</p>
+    </div>
+</div>
+</body>
+</html>

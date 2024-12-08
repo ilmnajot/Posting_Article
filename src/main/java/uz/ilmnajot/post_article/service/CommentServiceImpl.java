@@ -1,5 +1,4 @@
 package uz.ilmnajot.post_article.service;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.ilmnajot.post_article.entity.Article;
@@ -13,7 +12,6 @@ import uz.ilmnajot.post_article.repository.ArticleRepository;
 import uz.ilmnajot.post_article.repository.CommentRepository;
 import uz.ilmnajot.post_article.repository.UserRepository;
 import uz.ilmnajot.post_article.service.interfaces.CommentService;
-
 import java.util.ArrayList;
 import java.util.List;
 

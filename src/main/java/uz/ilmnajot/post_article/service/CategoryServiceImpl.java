@@ -1,11 +1,14 @@
 package uz.ilmnajot.post_article.service;
 
-import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uz.ilmnajot.post_article.entity.Category;
+import uz.ilmnajot.post_article.enums.ResponseMessage;
 import uz.ilmnajot.post_article.exception.AlreadyExistsException;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
 import uz.ilmnajot.post_article.mapper.CategoryMapper;
@@ -27,7 +30,10 @@ import java.util.UUID;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
+
     private final CategoryRepository categoryRepository;
+
     private final CategoryMapper categoryMapper;
 
     @Value("${upload.dir}")
@@ -38,35 +44,48 @@ public class CategoryServiceImpl implements CategoryService {
         this.categoryMapper = categoryMapper;
     }
 
+
     @Override
-    public ApiResponse addCategory(CategoryDTO categoryDTO, MultipartFile image) {
-        Optional<Category> optionalCategory = categoryRepository.findByNameAndDeleteFalse(categoryDTO.getName());
+    public ApiResponse addCategory(String name, String description, MultipartFile image) {
+        logger.info("Attempting to add category with name {}", name);
+        Optional<Category> optionalCategory = categoryRepository.findByNameAndDeleteFalse(name);
         if (optionalCategory.isPresent()) {
+            logger.warn("Category with name {} already exists", name);
             throw new AlreadyExistsException("Category already exists");
         }
         String addedImage = addImage(image);
-        Category categoryEntity = categoryMapper.toCategoryEntity(categoryDTO, addedImage);
+        logger.debug("Image successfully uploaded to the database: {}", addedImage);
+        Category categoryEntity = categoryMapper.toCategoryEntity(name, description, addedImage);
         Category saved = categoryRepository.save(categoryEntity);
+        logger.info("Category '{}' successfully saved", name);
         CategoryResponseDTO mapperCategoryDTO = categoryMapper.toCategoryDTO(saved);
-        return new ApiResponse(true, "success", HttpStatus.CREATED, mapperCategoryDTO);
+        return new ApiResponse(true, ResponseMessage.SUCCESS.getMessage(), HttpStatus.CREATED, mapperCategoryDTO);
     }
 
     private String addImage(MultipartFile image) {
         if (image == null || image.isEmpty()) {
+            logger.warn("No image provided for the category.");
             return null;
         }
         try {
+            logger.debug("Uploading image: {}", image.getOriginalFilename());
             String imageFileName = image.getOriginalFilename();
-            if (imageFileName==null || imageFileName.trim().isEmpty()) {
+            if (imageFileName == null || imageFileName.trim().isEmpty()) {
+                logger.error("Invalid image with provided");
                 throw new ResourceNotFoundException("Image name is invalid");
             }
             String replacedAll = imageFileName.replaceAll("[^a-zA-Z0-9._-]", "_");
             String fileName = UUID.randomUUID() + "_" + replacedAll;
             Path imagePath = Paths.get(imageDirectory, fileName);
+
+            logger.debug("saving image to the path: {}", imagePath);
+
             Files.createDirectories(imagePath.getParent()); // Create directories if not exists
             Files.write(imagePath, image.getBytes()); // Save the image
+            logger.info("Image successfully saved with name: {}", fileName);
             return "/images/" + fileName;
         } catch (Exception e) {
+            logger.error("Failed to save image: {}", e.getMessage(), e);
             throw new RuntimeException("Failed to save image: " + e.getMessage());
         }
 
@@ -76,7 +95,13 @@ public class CategoryServiceImpl implements CategoryService {
     public ApiResponse getCategory(Long categoryId) {
         Category category = getCategoryById(categoryId);
         CategoryResponseDTO categoryDTO = categoryMapper.toCategoryDTO(category);
-        return new ApiResponse(true, "success", HttpStatus.OK, categoryDTO);
+        return new ApiResponse(true, ResponseMessage.SUCCESS.getMessage(), HttpStatus.OK, categoryDTO);
+    }
+
+    @Override
+    public CategoryResponseDTO getCategoryByID(Long categoryId) {
+        Category category = getCategoryById(categoryId);
+        return categoryMapper.toCategoryDTO(category);
     }
 
     @Override
@@ -86,7 +111,7 @@ public class CategoryServiceImpl implements CategoryService {
         for (Category category : categoryList) {
             categoryDTOList.add(categoryMapper.toCategoryDTO(category));
         }
-        return new ApiResponse(true, "success", HttpStatus.OK, categoryDTOList);
+        return new ApiResponse(true, ResponseMessage.SUCCESS.getMessage(), HttpStatus.OK, categoryDTOList);
     }
 
     @Override
@@ -105,7 +130,7 @@ public class CategoryServiceImpl implements CategoryService {
         category.setDelete(true);
         Category saved = categoryRepository.save(category);
         CategoryResponseDTO categoryDTO = categoryMapper.toCategoryDTO(saved);
-        return new ApiResponse(true, "success", HttpStatus.OK, "Category has been deleted: " + categoryDTO);
+        return new ApiResponse(true, ResponseMessage.SUCCESS.getMessage(), HttpStatus.OK, "Category has been deleted: " + categoryDTO);
     }
 
     @Override
@@ -114,7 +139,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category updateEntity = categoryMapper.toUpdateEntity(category, categoryDTO);
         Category saved = categoryRepository.save(updateEntity);
         CategoryResponseDTO categoryDTOSaved = categoryMapper.toCategoryDTO(saved);
-        return new ApiResponse(true, "success", HttpStatus.OK, "Category has been updated: " + categoryDTOSaved);
+        return new ApiResponse(true, ResponseMessage.SUCCESS.getMessage(), HttpStatus.OK, "Category has been updated: " + categoryDTOSaved);
     }
 
     @Override
@@ -124,10 +149,10 @@ public class CategoryServiceImpl implements CategoryService {
         for (Category category : categoryList) {
             categoryDTOList.add(categoryMapper.toCategoryDTO(category));
         }
-        return new ApiResponse(true, "success", HttpStatus.OK, categoryDTOList);
+        return new ApiResponse(true, ResponseMessage.SUCCESS.getMessage(), HttpStatus.OK, categoryDTOList);
     }
 
-    private Category getCategoryById(Long categoryId) {
+    public Category getCategoryById(Long categoryId) {
         return categoryRepository.findByIdAndDeleteFalse(categoryId).orElseThrow(
                 () -> new ResourceNotFoundException(MessageKey.CATEGORY_NOT_FOUND));
     }

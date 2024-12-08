@@ -13,10 +13,7 @@ import uz.ilmnajot.post_article.enums.RoleName;
 import uz.ilmnajot.post_article.exception.AlreadyExistsException;
 import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
 import uz.ilmnajot.post_article.mapper.UserMapper;
-import uz.ilmnajot.post_article.payload.AuthRequest;
-import uz.ilmnajot.post_article.payload.UserDTO;
-import uz.ilmnajot.post_article.payload.AuthResponse;
-import uz.ilmnajot.post_article.payload.UserResponseDTO;
+import uz.ilmnajot.post_article.payload.*;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.repository.RoleRepository;
 import uz.ilmnajot.post_article.repository.UserRepository;
@@ -95,7 +92,8 @@ public class AuthServiceImpl implements AuthService {
         String token = jwtProvider.generateAccessToken(existUser);
         AuthResponse authResponse = new AuthResponse();
         authResponse.setToken(token);
-        authResponse.setUser(existUser);
+        UserProfileResponseDTO userProfileEntity = userMapper.toUserProfileEntity(existUser);
+        authResponse.setUser(userProfileEntity);
         return new ApiResponse(true, "success", HttpStatus.OK, authResponse);
     }
 }

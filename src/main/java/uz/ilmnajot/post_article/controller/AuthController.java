@@ -8,12 +8,15 @@ import uz.ilmnajot.post_article.payload.AuthRequest;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.service.auth.AuthService;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
     private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @PostMapping("/sign-up")
     public HttpEntity<ApiResponse> register(@RequestBody UserDTO authRequest) {

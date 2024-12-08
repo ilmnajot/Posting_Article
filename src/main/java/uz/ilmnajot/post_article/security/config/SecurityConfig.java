@@ -16,8 +16,6 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import uz.ilmnajot.post_article.security.jwt.JwtFilter;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
@@ -34,34 +32,14 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
+//                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authRequest -> authRequest
-                        .requestMatchers(
-                                "/v2/api-docs",
-                                "/v3/api-docs",
-                                "/v3/api-docs/**",
-                                "/swagger-resources",
-                                "/swagger-resources/**",
-                                "/swagger-ui/**",
-                                "/webjars/**",
-                                "/swagger-ui.html",
-                                "/configuration/ui",
-                                "/configuration/security",
-                                "/api/auth/**,",
-                                "/",
-                                "/login",
-                                "/sign-up",
-                                "/email-verify",
-                                "/verify-email",
-                                "/home",
-                                "/verification-success",
-                                "/addCategory",
-                                "/addArticle",
-                                "/category-list",
-                                "/images/**")
-                        .permitAll()
+                        .requestMatchers(getWhitelist()).permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/news/add_news").hasAuthority("ADMIN")
                         .anyRequest()
-                        .authenticated())
+                        .authenticated()
+                )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -73,21 +51,60 @@ public class SecurityConfig {
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/home")
                         .failureHandler(new CustomAuthenticationFailureHandler())
-                        .failureUrl("/login?error=true") //redirect to the login page
+                        .failureUrl("/login?error=true") //redirect to the home page
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessHandler(((request, response, authentication) ->{
-                            response.setStatus(HttpServletResponse.SC_OK);
-                            response.sendRedirect("/login?logout");
-                        }))// Add logout URL
-//                        .logoutSuccessUrl("/login?logout")  // Redirect to login after logout
-                        .invalidateHttpSession(true)  // Invalidate the session
-                        .clearAuthentication(true)  // Clear authentication
-                        .permitAll()
+                                .logoutUrl("/logout")
+                                .logoutSuccessHandler(((request, response, authentication) -> {
+                                    response.setStatus(HttpServletResponse.SC_OK);
+                                    response.sendRedirect("/home?logout");
+                                }))// Add logout URL
+                                .invalidateHttpSession(true)  // Invalidate the session
+                                .clearAuthentication(true)  // Clear authentication
+                                .permitAll()
                 );
         return http.build();
     }
+
+    private String[] getWhitelist() {
+        return new String[]{
+                "/v2/api-docs",
+                "/v3/api-docs",
+                "/v3/api-docs/**",
+                "/swagger-resources",
+                "/swagger-resources/**",
+                "/swagger-ui/**",
+                "/webjars/**",
+                "/swagger-ui.html",
+                "/configuration/ui",
+                "/configuration/security"
+        };
+    }
+
+//    private String[] getCustomWhitelist() {
+//        return new String[]{
+//                "/api/auth/**",
+////                "/login",
+////                "/sign-up",
+////                "/email-verify",
+////                "/verify-email",
+//                "/home",
+////                "/verification-success",
+////                "/category-list",
+////                "/topics/**",
+////                "/topic-list/**",
+////                "/category-list",
+////                "/categories/**",
+////                "/articles/**",
+////                "/topics/topicId/articles",
+////                "/topics/topicId/articles/articleId",
+////                "/news-list",
+////                "/news",
+////                "/details/id",
+////                "/aboutus",
+//
+//        };
+//    }
 
 }
