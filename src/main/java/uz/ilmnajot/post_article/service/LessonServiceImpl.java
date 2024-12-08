@@ -3,6 +3,7 @@ package uz.ilmnajot.post_article.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uz.ilmnajot.post_article.entity.Lesson;
@@ -12,6 +13,7 @@ import uz.ilmnajot.post_article.exception.ResourceNotFoundException;
 import uz.ilmnajot.post_article.mapper.LessonMapper;
 import uz.ilmnajot.post_article.mapper.ModuleMapper;
 import uz.ilmnajot.post_article.payload.LessonDTO;
+import uz.ilmnajot.post_article.payload.LessonRequestDTO;
 import uz.ilmnajot.post_article.payload.LessonResponseDTO;
 import uz.ilmnajot.post_article.payload.ModuleDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
@@ -115,6 +117,22 @@ public class LessonServiceImpl implements LessonService {
         List<Lesson> lessonList = lessonRepository.findByModule_IdOrderByOrderIndex(moduleId);
         List<LessonResponseDTO> lessonDTOList = lessonList.stream().map(lessonMapper::toLessonDTO).toList();
         return new ApiResponse(true, ResponseMessage.SUCCESS.getMessage(), HttpStatus.OK, lessonDTOList);
+    }
+
+    @Override
+    public void videoStream(ServerHttpResponse httpResponse, String httpRangeList, String fileType, String fileName) {
+        //TODO 1. doing lessons stream
+    }
+
+    //here is pasting and adding a YouTube video lesson
+    @Override
+    public ApiResponse addLessonFromYoutube(Long moduleId, LessonRequestDTO lessonRequestDTO) {
+        Module module = this.moduleRepository.findByIdAndDeleteFalse(moduleId).orElseThrow(
+                () -> new ResourceNotFoundException(ResponseMessage.NOT_FOUND.getMessage()));
+        Lesson lessonEntity = lessonMapper.toLessonEntity(module, lessonRequestDTO);
+        Lesson savedLesson = this.lessonRepository.save(lessonEntity);
+        LessonResponseDTO lessonDTO = this.lessonMapper.toLessonDTO(savedLesson);
+        return new ApiResponse(true, ResponseMessage.SUCCESS.getMessage(), HttpStatus.CREATED, lessonDTO);
     }
 
     private Lesson findLessonById(Long lessonId) {
