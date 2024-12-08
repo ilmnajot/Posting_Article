@@ -76,15 +76,15 @@ public class LessonController {
 
 
     // Update a lesson
-    @PutMapping("/{lessonId}")
+    @PutMapping("/updateLesson/{lessonId}")
     public ResponseEntity<ApiResponse> updateLesson(
-            @PathVariable Long lessonId, @RequestBody @Valid LessonDTO updatedLesson) {
+            @PathVariable Long lessonId, @RequestBody @Valid LessonRequestDTO updatedLesson) {
         ApiResponse apiResponse = lessonService.updateLesson(lessonId, updatedLesson);
         return ResponseEntity.ok(apiResponse);
     }
 
     // Delete a lesson
-    @DeleteMapping("/{lessonId}")
+    @DeleteMapping("/deleteLesson/{lessonId}")
     public ResponseEntity<ApiResponse> deleteLesson(@PathVariable Long lessonId) {
         ApiResponse apiResponse = lessonService.deleteLesson(lessonId);
         return ResponseEntity.ok(apiResponse);

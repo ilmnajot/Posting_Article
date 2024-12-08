@@ -49,16 +49,16 @@ public class LessonMapperImpl implements LessonMapper {
         return lesson;
     }
 
-    public Lesson toUpdateLessonEntity(Lesson lesson, LessonDTO lessonDTO) {
+    public Lesson toUpdateLessonEntity(Lesson lesson, LessonRequestDTO lessonDTO) {
         if (lessonDTO.getName() != null) {
             lesson.setName(lessonDTO.getName());
         }
         if (lessonDTO.getDescription() != null) {
             lesson.setDescription(lessonDTO.getDescription());
         }
-//        if (lessonDTO.getVideoURL() != null) {
-//            lesson.setVideoURL(lessonDTO.getVideoURL());
-//        }
+        if (lessonDTO.getVideoURL() != null) {
+            lesson.setVideoURL(lessonDTO.getVideoURL());
+        }
         if (lessonDTO.getDuration() != null) {
             lesson.setDuration(lessonDTO.getDuration());
         }

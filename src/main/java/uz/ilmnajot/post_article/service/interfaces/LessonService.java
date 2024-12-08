@@ -11,7 +11,7 @@ public interface LessonService {
 
     ApiResponse getModulesByCourse(Long courseId);
 
-    ApiResponse updateLesson(Long lessonId, LessonDTO updatedLesson);
+    ApiResponse updateLesson(Long lessonId, LessonRequestDTO updatedLesson);
 
     ApiResponse deleteLesson(Long lessonId);
 

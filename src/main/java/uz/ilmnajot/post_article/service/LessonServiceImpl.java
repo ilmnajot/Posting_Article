@@ -89,12 +89,12 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public ApiResponse updateLesson(Long lessonId, LessonDTO updatedLesson) {
+    public ApiResponse updateLesson(Long lessonId, LessonRequestDTO updatedLesson) {
         Lesson lesson = findLessonById(lessonId);
         Lesson updateLessonEntity = lessonMapper.toUpdateLessonEntity(lesson, updatedLesson);
         Lesson saved = lessonRepository.save(updateLessonEntity);
         LessonResponseDTO lessonDTO1 = lessonMapper.toLessonDTO(saved);
-        return new ApiResponse(true, "success", HttpStatus.OK, lessonDTO1);
+        return new ApiResponse(true, ResponseMessage.SUCCESS.getMessage(), HttpStatus.OK, lessonDTO1);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class LessonServiceImpl implements LessonService {
         Lesson lesson = findLessonById(lessonId);
         lesson.setDelete(true);
         lessonRepository.save(lesson);
-        return new ApiResponse(true, "success", HttpStatus.NO_CONTENT, "Lesson has been successfully deleted");
+        return new ApiResponse(true, ResponseMessage.SUCCESS.getMessage(), HttpStatus.NO_CONTENT, "Lesson has been successfully deleted");
     }
 
     @Override

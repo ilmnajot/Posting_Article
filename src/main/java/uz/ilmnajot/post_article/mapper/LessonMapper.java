@@ -12,6 +12,6 @@ public interface LessonMapper {
     Lesson toLessonEntity(Module module, String name, String description, Integer duration, String videoURL);
     Lesson toLessonEntity(Module module, LessonRequestDTO lessonRequestDTO);
     LessonResponseDTO toLessonDTO(Lesson lesson);
-    Lesson toUpdateLessonEntity(Lesson lesson, LessonDTO lessonDTO);
+    Lesson toUpdateLessonEntity(Lesson lesson, LessonRequestDTO lessonDTO);
 
 }
