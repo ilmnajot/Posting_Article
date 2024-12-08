@@ -129,7 +129,7 @@ public class LessonServiceImpl implements LessonService {
     public ApiResponse addLessonFromYoutube(Long moduleId, LessonRequestDTO lessonRequestDTO) {
         Module module = this.moduleRepository.findByIdAndDeleteFalse(moduleId).orElseThrow(
                 () -> new ResourceNotFoundException(ResponseMessage.NOT_FOUND.getMessage()));
-        Lesson lessonEntity = lessonMapper.toLessonEntity(module, lessonRequestDTO);
+        Lesson lessonEntity = this.lessonMapper.toLessonEntity(module, lessonRequestDTO);
         Lesson savedLesson = this.lessonRepository.save(lessonEntity);
         LessonResponseDTO lessonDTO = this.lessonMapper.toLessonDTO(savedLesson);
         return new ApiResponse(true, ResponseMessage.SUCCESS.getMessage(), HttpStatus.CREATED, lessonDTO);
