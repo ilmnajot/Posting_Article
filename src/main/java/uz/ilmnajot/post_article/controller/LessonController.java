@@ -6,10 +6,12 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.ilmnajot.post_article.payload.LessonDTO;
+import uz.ilmnajot.post_article.payload.LessonRequestDTO;
 import uz.ilmnajot.post_article.payload.common.ApiResponse;
 import uz.ilmnajot.post_article.service.interfaces.LessonService;
 
@@ -37,6 +39,20 @@ public class LessonController {
             @RequestParam("duration") Integer duration,
             @RequestParam("video") MultipartFile video) {
         ApiResponse apiResponse = lessonService.addLesson(moduleId, name, description, duration, video);
+        return ResponseEntity.ok(apiResponse);
+    }
+
+
+    @Operation(summary = "Add a lesson with a Youtube link video")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Lesson added successfully"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid input")
+    })
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    @PostMapping(value = "/addYouTubeVideoLesson/{moduleId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public HttpEntity<ApiResponse> addLessonFromYoutube(@PathVariable(name = "moduleId") Long moduleId,
+                                                        @RequestBody LessonRequestDTO lessonRequestDTO) {
+        ApiResponse apiResponse = lessonService.addLessonFromYoutube(moduleId, lessonRequestDTO);
         return ResponseEntity.ok(apiResponse);
     }
 
@@ -79,4 +95,16 @@ public class LessonController {
     public ResponseEntity<ApiResponse> searchLessons(@RequestParam String keyword) {
         return ResponseEntity.ok(lessonService.searchLessons(keyword));
     }
+
+
+    @GetMapping("/stream/{fileType}/{fileName}")
+    public HttpEntity<byte[]> streamVideo(ServerHttpResponse httpResponse,
+                                          @RequestHeader(value = "Range", required = false) String httpRangeList,
+                                          @PathVariable("fileType") String fileType,
+                                          @PathVariable("fileName") String fileName) {
+        lessonService.videoStream(httpResponse, httpRangeList, fileType, fileName);
+        return null;
+
+    }
+
 }

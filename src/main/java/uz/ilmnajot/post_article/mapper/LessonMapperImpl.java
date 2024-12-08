@@ -5,11 +5,12 @@ import org.springframework.stereotype.Component;
 import uz.ilmnajot.post_article.entity.Lesson;
 import uz.ilmnajot.post_article.entity.Module;
 import uz.ilmnajot.post_article.payload.LessonDTO;
+import uz.ilmnajot.post_article.payload.LessonRequestDTO;
 import uz.ilmnajot.post_article.payload.LessonResponseDTO;
+
 @RequiredArgsConstructor
 @Component
 public class LessonMapperImpl implements LessonMapper {
-
 
 
     public Lesson toLessonEntity(Module module, String name, String description, Integer duration, String videoURL) {
@@ -31,9 +32,21 @@ public class LessonMapperImpl implements LessonMapper {
                 .id(lesson.getId())
                 .name(lesson.getName())
                 .description(lesson.getDescription())
-                .videoURL(lesson.getVideoURL())
                 .duration(lesson.getDuration())
+                .videoURL(lesson.getVideoURL())
+                .moduleId(lesson.getModule().getId())
                 .build();
+    }
+
+    @Override
+    public Lesson toLessonEntity(Module module, LessonRequestDTO lessonRequestDTO) {
+        Lesson lesson = new Lesson();
+        lesson.setName(lessonRequestDTO.getName());
+        lesson.setDescription(lessonRequestDTO.getDescription());
+        lesson.setDuration(lessonRequestDTO.getDuration());
+        lesson.setDuration(lessonRequestDTO.getDuration());
+        lesson.setModule(module);
+        return lesson;
     }
 
     public Lesson toUpdateLessonEntity(Lesson lesson, LessonDTO lessonDTO) {
@@ -43,9 +56,6 @@ public class LessonMapperImpl implements LessonMapper {
         if (lessonDTO.getDescription() != null) {
             lesson.setDescription(lessonDTO.getDescription());
         }
-//        if (lessonDTO.getOrderIndex() != null) {
-//            lesson.setOrderIndex(lessonDTO.getOrderIndex());
-//        }
 //        if (lessonDTO.getVideoURL() != null) {
 //            lesson.setVideoURL(lessonDTO.getVideoURL());
 //        }
