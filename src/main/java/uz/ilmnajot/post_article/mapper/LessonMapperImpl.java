@@ -33,8 +33,8 @@ public class LessonMapperImpl implements LessonMapper {
                 .name(lesson.getName())
                 .description(lesson.getDescription())
                 .duration(lesson.getDuration())
-                .videoURL(lesson.getVideoURL())
                 .moduleId(lesson.getModule().getId())
+                .videoURL(lesson.getVideoURL())
                 .build();
     }
 
@@ -44,7 +44,7 @@ public class LessonMapperImpl implements LessonMapper {
         lesson.setName(lessonRequestDTO.getName());
         lesson.setDescription(lessonRequestDTO.getDescription());
         lesson.setDuration(lessonRequestDTO.getDuration());
-        lesson.setDuration(lessonRequestDTO.getDuration());
+        lesson.setVideoURL(lessonRequestDTO.getVideoURL());
         lesson.setModule(module);
         return lesson;
     }

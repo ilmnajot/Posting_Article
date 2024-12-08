@@ -49,7 +49,7 @@ public class LessonController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid input")
     })
     @PreAuthorize("hasAnyAuthority('ADMIN')")
-    @PostMapping(value = "/addYouTubeVideoLesson/{moduleId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/addYouTubeVideoLesson/{moduleId}")
     public HttpEntity<ApiResponse> addLessonFromYoutube(@PathVariable(name = "moduleId") Long moduleId,
                                                         @RequestBody LessonRequestDTO lessonRequestDTO) {
         ApiResponse apiResponse = lessonService.addLessonFromYoutube(moduleId, lessonRequestDTO);
