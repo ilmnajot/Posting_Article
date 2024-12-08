@@ -2,7 +2,6 @@ package uz.ilmnajot.post_article.controller.view;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,7 +39,7 @@ public class ViewCategoryController {
         }
         try {
 
-            categoryService.addCategory(categoryDTO, image);
+//            categoryService.addCategory(name, description, image);
             model.addAttribute("success", "Category added successfully!");
             model.addAttribute("category", new CategoryDTO()); // Clear the form
         } catch (Exception e) {

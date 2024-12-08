@@ -7,10 +7,10 @@ import uz.ilmnajot.post_article.payload.CategoryResponseDTO;
 @Component
 public class CategoryMapperImpl implements CategoryMapper {
 
-    public Category toCategoryEntity(CategoryDTO categoryDTO, String imageURL) {
+    public Category toCategoryEntity(String name, String description, String imageURL) {
         Category category = new Category();
-        category.setName(categoryDTO.getName());
-        category.setDescription(categoryDTO.getDescription());
+        category.setName(name);
+        category.setDescription(description);
         category.setImageURL(imageURL);
         return category;
     }
@@ -33,9 +33,9 @@ public class CategoryMapperImpl implements CategoryMapper {
         if (categoryDTO.getDescription()!=null){
             category.setDescription(categoryDTO.getDescription());
         }
-        if (categoryDTO.getImageURL()!=null){
-            category.setImageURL(categoryDTO.getImageURL());
-        }
+//        if (categoryDTO.getImageURL()!=null){
+//            category.setImageURL(categoryDTO.getImageURL());
+//        }
         return category;
     }
 }

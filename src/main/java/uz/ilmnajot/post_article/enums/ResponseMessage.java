@@ -1,5 +1,9 @@
 package uz.ilmnajot.post_article.enums;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
 public enum ResponseMessage {
     SUCCESS("success"),
     ERROR("error"),
@@ -9,8 +13,5 @@ public enum ResponseMessage {
 
     ResponseMessage(String message) {
         this.message = message;
-    }
-    public String getMessage() {
-        return message;
     }
 }

@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.ilmnajot.post_article.payload.LessonDTO;
@@ -27,6 +28,7 @@ public class LessonController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Lesson added successfully"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid input")
     })
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @PostMapping(value = "/addLesson/{moduleId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public HttpEntity<ApiResponse> addLesson(
             @PathVariable(name = "moduleId") Long moduleId,
@@ -38,12 +40,18 @@ public class LessonController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    // Get lessons by course
+    @Operation(summary = "Get a category by ID")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Category retrieved successfully"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Category not found")
+    })
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/course/{courseId}")
     public ResponseEntity<ApiResponse> getModulesByCourse(@PathVariable Long courseId) {
         return ResponseEntity.ok(lessonService.getModulesByCourse(courseId));
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @GetMapping("/module/{moduleId}")
     public ResponseEntity<ApiResponse> getLessonsByModule(@PathVariable Long moduleId) {
         ApiResponse lessonsByModule = lessonService.getLessonsByModule(moduleId);
